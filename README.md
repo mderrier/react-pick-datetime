@@ -4,7 +4,7 @@ Flexible widgets for picking dates and times. Built on top of [react-pick](https
 
 ## Demos
 
-[http://jwilde.me/react-pick-datetime/]
+[http://jwilde.me/react-pick-datetime/](http://jwilde.me/react-pick-datetime/)
 
 ## Installation
 
