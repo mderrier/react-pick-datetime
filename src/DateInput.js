@@ -1,5 +1,4 @@
 var DateInput = require('./DateInput');
-var DateKeyBindings = require('./DateKeyBindings');
 var DatePopup = require('./DatePopup');
 var React = require('react/addons');
 var {InputPopupWrapper} = require('react-pick');
@@ -42,43 +41,54 @@ var DateInput = React.createClass({
   },
 
   handlePopupChange: function(value) {
-    this.setState({inputValue: value.format(this.props.inputValueFormat)});
+    this.setState({
+      inputValue: value.format(this.props.inputValueFormat),
+      popupMonth: value || this.state.popupMonth
+    });
+
     this.props.onChange(value);
   },
 
   handlePopupComplete: function(value) {
-    this.setState({
-      isOpen: false,
-      inputValue: value.format(this.props.inputValueFormat)
-    });
-    this.props.onChange(value)
+    this.handlePopupChange(value);
+    this.setState({isOpen: false});
+  },
+
+  handlePopupCancel: function() {
+    this.setState({isOpen: false});
   },
 
   handleInputChange: function(event) {
     var inputValue = event.target.value;
+    var {inputValueFormat, onChange} = this.props;
+
     this.setState({inputValue});
 
-    var parsedInputValue = moment(inputValue, this.props.inputValueFormat);
+    var parsedInputValue = moment(inputValue, inputValueFormat, true);
     if (parsedInputValue.isValid()) {
       this.setState({popupMonth: parsedInputValue});
-      this.props.onChange(parsedInputValue);
+      onChange(parsedInputValue);
     } else {
-      this.props.onChange(null);
+      onChange(null);
     }
   },
 
   handleButtonClick: function() {
-    this.setState({isOpen: !this.state.isOpen});
+    this.setState({isOpen: !this.state.isOpen}, () => {
+      this.state.isOpen && this.refs['popup'].focusOnGrid();
+    });
   },
 
   renderPopup: function() {
     return (
       <DatePopup 
+        ref="popup"
         month={this.state.popupMonth}
         value={this.props.value}
         onMonthChange={this.handlePopupMonthChange}
         onChange={this.handlePopupChange}
         onComplete={this.handlePopupComplete}
+        onCancel={this.handlePopupCancel}
       />
     );
   },

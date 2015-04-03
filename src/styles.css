@@ -19,22 +19,26 @@
   width: auto;
 }
 
-.DatePopup-header {
+.DatePopupHeader {
   padding: 0.5em;
 }
 
-.DatePopup-previousButton {
+.DatePopupHeader-previousButton {
   float: left;
 }
 
-.DatePopup-nextButton {
+.DatePopupHeader-nextButton {
   float: right;
 }
 
-.DatePopup-heading {
+.DatePopupHeader-heading {
   text-align: center;
   margin: 0.35em 0;
   font-weight: bold;
+}
+
+.DatePopupGrid {
+  outline: 0;
 }
 
 .DatePopup-day {
