@@ -7,27 +7,49 @@ var {InputPopupWrapper} = require('react-pick');
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
-var emptyFunction = require('react-pick/lib/helpers/emptyFunction');
+var joinClasses = require('react/lib/joinClasses');
 
 var DateInput = React.createClass({
 
   mixins: [PureRenderMixin],
 
   propTypes: {
-    buttonComponent: React.PropTypes.func,
+    /**
+     * Event handler fired when the value of the `<DateInput>` changes.
+     * The called function is passed `value`.
+     */
+    onChange: React.PropTypes.func.isRequired,
+
+    /**
+     * The current value of the `<DateInput>`, as a `moment` date.
+     */
+    value: React.PropTypes.object,
+
+    /**
+     * The format of the date shown and parsed in the `<input> box.
+     * Default is `'l'`.
+     */
     inputValueFormat: React.PropTypes.string,
-    onChange: React.PropTypes.func,
+
+    /**
+     * The component to render for the button that lets you toggle the popup.
+     * Default is `DateInputButton`.
+     */
+    buttonComponent: React.PropTypes.func,
+
+    /**
+     * The component to render for the date popup.
+     * Default is `DatePopup`.
+     */
     popupComponent: React.PropTypes.func,
-    value: React.PropTypes.object
   },
 
   getDefaultProps: function() {
     return {
-      buttonComponent: DateInputButton,
+      value: null,
       inputValueFormat: 'l',
-      onChange: emptyFunction,
-      popupComponent: DatePopup,
-      value: null
+      buttonComponent: DateInputButton,
+      popupComponent: DatePopup
     };
   },
 
@@ -102,14 +124,14 @@ var DateInput = React.createClass({
 
   render: function() {
     var ButtonComponent = this.props.buttonComponent;
+    var {className, ...otherProps} = this.props;
 
     return (
-      <div className="DateInput">
+      <div {...otherProps} className={joinClasses('DateInput', className)}>
         <InputPopupWrapper 
           isOpen={this.state.isOpen} 
           popupElement={this.renderPopup()}>
           <input
-            {...this.props}
             value={this.state.inputValue}
             onFocus={this.handleInputFocus}
             onBlur={this.handleInputBlur}
