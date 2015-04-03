@@ -1,32 +1,51 @@
 var React = require('react');
-var TimeCombobox = require('../src/TimeCombobox');
+var TimeInput = require('../src/TimeInput');
+var DateInput = require('../src/DateInput');
 
 require('react-pick/lib/styles.css');
+require('../src/styles.css');
 
 var App = React.createClass({
 
   getInitialState: function() {
     return {
-      value: {inputValue: '', selectedValue: null}
+      dateValue: null,
+      timeValue: {inputValue: '', selectedValue: null}
     };
   },
 
-  handleChange: function(newValue) {
-    this.setState({value: newValue});
+  handleDateChange: function(dateValue) {
+    this.setState({dateValue});
+  },
+
+  handleTimeChange: function(timeValue) {
+    this.setState({timeValue});
   },
 
   render: function() {
-    var {selectedValue} = this.state.value;
+    var {selectedTime} = this.state.timeValue;
+    var selectedDate = this.state.dateValue;
 
     return (
       <div>
         <h1>react-pick-datetime</h1>
-        <p>Selected Time: {selectedValue && selectedValue.value.format()}</p>
-        <TimeCombobox 
-          placeholder="Type a time..."
-          value={this.state.value} 
-          onChange={this.handleChange}
+
+        <h2>DateInput</h2>
+        <p>Selected Date: {selectedDate && selectedDate.format()}</p>
+        <DateInput 
+          placeholder="Pick a date..."
+          value={selectedDate} 
+          onChange={this.handleDateChange}
         />
+
+        <h2>TimeInput</h2>
+        <p>Selected Time: {selectedTime && selectedTime.value.format()}</p>
+        <TimeInput 
+          placeholder="Type a time..."
+          value={this.state.timeValue} 
+          onChange={this.handleTimeChange}
+        />
+        <div><button>something else to focus</button></div>
       </div>
     );
   }
