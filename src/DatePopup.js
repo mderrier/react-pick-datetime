@@ -5,6 +5,7 @@ var React = require('react/addons');
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
+var joinClasses = require('react/lib/joinClasses');
 var getUniqueId = require('react-pick/lib/helpers/getUniqueId');
 
 var DatePopup = React.createClass({
@@ -41,14 +42,25 @@ var DatePopup = React.createClass({
   },
 
   render: function() {
+    var {
+      className, 
+      month, 
+      value, 
+      onMonthChange, 
+      onChange, 
+      onComplete, 
+      onCancel, 
+      ...otherProps
+    } = this.props;
+
     return (
-      <div className="DatePopup">
+      <div {...otherProps} className={joinClasses('DatePopup', className)}>
         <DatePopupHeader
-          {...this.props}
+          {...{month, onMonthChange}}
           getHeadingId={this.getHeadingId}
         />
         <DatePopupGrid
-          {...this.props}
+          {...{month, value, onChange, onComplete, onCancel}}
           ref="grid"
           aria-labelledby={this.getHeadingId()}
           tabIndex="0"

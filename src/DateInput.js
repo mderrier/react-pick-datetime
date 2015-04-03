@@ -1,4 +1,5 @@
 var DateInput = require('./DateInput');
+var DateInputButton = require('./DateInputButton');
 var DatePopup = require('./DatePopup');
 var React = require('react/addons');
 var {InputPopupWrapper} = require('react-pick');
@@ -13,16 +14,20 @@ var DateInput = React.createClass({
   mixins: [PureRenderMixin],
 
   propTypes: {
-    value: React.PropTypes.object,
+    buttonComponent: React.PropTypes.func,
+    inputValueFormat: React.PropTypes.string,
     onChange: React.PropTypes.func,
-    inputValueFormat: React.PropTypes.string
+    popupComponent: React.PropTypes.func,
+    value: React.PropTypes.object
   },
 
   getDefaultProps: function() {
     return {
-      value: null,
+      buttonComponent: DateInputButton,
+      inputValueFormat: 'l',
       onChange: emptyFunction,
-      inputValueFormat: 'l'
+      popupComponent: DatePopup,
+      value: null
     };
   },
 
@@ -80,8 +85,10 @@ var DateInput = React.createClass({
   },
 
   renderPopup: function() {
+    var PopupComponent = this.props.popupComponent;
+
     return (
-      <DatePopup 
+      <PopupComponent 
         ref="popup"
         month={this.state.popupMonth}
         value={this.props.value}
@@ -94,6 +101,8 @@ var DateInput = React.createClass({
   },
 
   render: function() {
+    var ButtonComponent = this.props.buttonComponent;
+
     return (
       <div className="DateInput">
         <InputPopupWrapper 
@@ -107,13 +116,10 @@ var DateInput = React.createClass({
             onChange={this.handleInputChange}
           />
         </InputPopupWrapper>
-        <span
-          role="button"
+        <ButtonComponent
           aria-hidden="true" 
-          className="DateInput-button"
-          onClick={this.handleButtonClick}>
-          📅
-        </span>
+          onClick={this.handleButtonClick}
+        />
       </div>
     );
   }

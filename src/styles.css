@@ -3,7 +3,7 @@
   position: relative;
 }
 
-.DateInput-button {
+.DateInputButton {
   cursor: default;
   font-size: 0.75em;
   opacity: 0.8;
@@ -11,7 +11,7 @@
   right: 0.25em;
 }
 
-.DateInput-button:active {
+.DateInputButton:active {
   opacity: 1;
 }
 
@@ -41,22 +41,22 @@
   outline: 0;
 }
 
-.DatePopup-day {
+.DatePopupGridBody-day {
   cursor: pointer;
   padding: 0.5em;
   text-align: center;
   vertical-align: middle;
 }
 
-.DatePopup-day:hover,
-.DatePopup-day--isValue {
+.DatePopupGridBody-day:hover,
+.DatePopupGridBody-day--isValue {
   background: hsl(200, 50%, 50%);
 }
 
-.DatePopup-day--isToday {
+.DatePopupGridBody-day--isToday {
   background: hsl(200, 50%, 80%);
 }
 
-.DatePopup-day--isOtherMonth {
+.DatePopupGridBody-day--isOtherMonth {
   color: #999;
 }

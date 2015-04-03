@@ -64,10 +64,10 @@ var DatePopupGridBody = React.createClass({
               <td 
                 aria-selected={day.isSelected+''}
                 className={joinClasses(
-                  'DatePopup-day',
-                  day.isToday && 'DatePopup-day--isToday',
-                  day.isOtherMonth && 'DatePopup-day--isOtherMonth',
-                  day.isValue && 'DatePopup-day--isValue'
+                  'DatePopupGridBody-day',
+                  day.isToday && 'DatePopupGridBody-day--isToday',
+                  day.isOtherMonth && 'DatePopupGridBody-day--isOtherMonth',
+                  day.isValue && 'DatePopupGridBody-day--isValue'
                 )}
                 id={this.props.getDescendantIdForDay(day.value)}
                 key={idx}
