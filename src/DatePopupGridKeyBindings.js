@@ -1,4 +1,6 @@
-var React = require('react');
+var React = require('react/addons');
+
+var {PureRenderMixin} = React.addons;
 
 var cloneWithProps = require('react/lib/cloneWithProps');
 var moment = require('moment');
@@ -11,6 +13,8 @@ const KEY_RETURN = 13;
 const KEY_ESC = 27;
 
 var DatePopupGridKeyBindings = React.createClass({
+
+  mixins: [PureRenderMixin],
 
   propTypes: {
     value: React.PropTypes.object,

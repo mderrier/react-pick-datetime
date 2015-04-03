@@ -1,8 +1,12 @@
-var React = require('react');
+var React = require('react/addons');
+
+var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
 
 var DatePopupHeader = React.createClass({
+
+  mixins: [PureRenderMixin],
 
   propTypes: {
     getHeadingId: React.PropTypes.func.isRequired,

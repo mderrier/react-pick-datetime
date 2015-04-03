@@ -1,12 +1,16 @@
 var DatePopupGridBody = require('./DatePopupGridBody');
 var DatePopupGridHeader = require('./DatePopupGridHeader')
 var DatePopupGridKeyBindings = require('./DatePopupGridKeyBindings');;
-var React = require('react');
+var React = require('react/addons');
+
+var {PureRenderMixin} = React.addons;
 
 var getUniqueId = require('react-pick/lib/helpers/getUniqueId');
 var moment = require('moment');
 
 var DatePopupGrid = React.createClass({
+
+  mixins: [PureRenderMixin],
 
   propTypes: {
     month: React.PropTypes.object.isRequired,
