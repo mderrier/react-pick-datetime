@@ -4,6 +4,7 @@ var {Combobox} = require('react-pick');
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
+var emptyFunction = require('react-pick/lib/helpers/emptyFunction');
 
 var TimeInput = React.createClass({
 
@@ -30,14 +31,18 @@ var TimeInput = React.createClass({
     increment: React.PropTypes.shape({
       unit: React.PropTypes.string,
       amount: React.PropTypes.number
-    })
+    }),
+
+    onChange: React.PropTypes.func.isRequired,
+    onComplete: React.PropTypes.func
   },
 
   getDefaultProps: function() {
     return {
       start: moment().startOf('day'),
       end: moment().endOf('day'),
-      increment: {amount: 5, unit: 'minutes'}
+      increment: {amount: 5, unit: 'minutes'},
+      onComplete: emptyFunction
     };
   },
 
@@ -75,12 +80,22 @@ var TimeInput = React.createClass({
     return option.formatted;
   },
 
+  handleChange: function(value) {
+    this.props.onChange(value.value);
+  },
+
+  handleComplete: function(value) {
+    this.props.onComplete(value.value);
+  },
+
   render: function() {
     return (
       <Combobox
         {...this.props}
         getLabelForOption={this.getLabelForOption}
         getOptionsForInputValue={this.getOptionsForInputValue}
+        onChange={this.handleChange}
+        onComplete={this.handleComplete}
       />
     );
   }

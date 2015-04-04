@@ -1,6 +1,15 @@
+### v0.4.0 (2014-04-04)
+
+#### CHANGES
+
+- Move onto v0.4.0 of `react-pick`. 
+- Make locations of prop insertions in `DateInput` a little more consistent with what `Combobox` does. 
+- Add support for `onComplete`, like in `Combobox`. 
+- Ensure that we properly unbox the moment value in `TimeInput`.
+
 ### v0.3.1 (2015-04-03)
 
-### BUGFIX
+#### BUGFIX
 
 - [b74bc7b](https://github.com/hellojwilde/react-pick-datetime/commit/8a935b3) - Actually add the styles into the build.
 

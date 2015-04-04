@@ -7,7 +7,7 @@ var {InputPopupWrapper} = require('react-pick');
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
-var joinClasses = require('react/lib/joinClasses');
+var emptyFunction = require('react-pick/lib/helpers/emptyFunction');
 
 var DateInput = React.createClass({
 
@@ -24,6 +24,12 @@ var DateInput = React.createClass({
      * The current value of the `<DateInput>`, as a `moment` date.
      */
     value: React.PropTypes.object,
+
+    /**
+     * Event handler fired when a new non-null value is selected and the 
+     * popup closed. The called function is passed `value`.
+     */
+    onComplete: React.PropTypes.func,
 
     /**
      * The format of the date shown and parsed in the `<input> box.
@@ -57,6 +63,7 @@ var DateInput = React.createClass({
     return {
       value: null,
       inputValueFormat: 'l',
+      onComplete: emptyFunction,
       inputComponent: 'input',
       buttonComponent: DateInputButton,
       popupComponent: DatePopup
@@ -89,6 +96,7 @@ var DateInput = React.createClass({
   handlePopupComplete: function(value) {
     this.handlePopupChange(value);
     this.setState({isOpen: false});
+    this.props.onComplete(value);
   },
 
   handlePopupCancel: function() {
@@ -135,15 +143,14 @@ var DateInput = React.createClass({
   render: function() {
     var ButtonComponent = this.props.buttonComponent;
     var InputComponent = this.props.inputComponent;
-    var {className, ...otherProps} = this.props;
 
     return (
-      <div className={joinClasses('DateInput', className)}>
+      <div className="DateInput">
         <InputPopupWrapper 
           isOpen={this.state.isOpen} 
           popupElement={this.renderPopup()}>
           <InputComponent
-            {...otherProps}
+            {...this.props}
             value={this.state.inputValue}
             onFocus={this.handleInputFocus}
             onBlur={this.handleInputBlur}

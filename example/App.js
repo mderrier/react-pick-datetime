@@ -10,7 +10,7 @@ var App = React.createClass({
   getInitialState: function() {
     return {
       dateValue: null,
-      timeValue: {inputValue: '', selectedValue: null}
+      timeValue: null,
     };
   },
 
@@ -23,26 +23,27 @@ var App = React.createClass({
   },
 
   render: function() {
-    var {selectedTime} = this.state.timeValue;
-    var selectedDate = this.state.dateValue;
+    var {dateValue, timeValue} = this.state;
+
+    console.log(timeValue)
 
     return (
       <div>
         <h1>react-pick-datetime</h1>
 
         <h2>DateInput</h2>
-        <p>Selected Date: {selectedDate && selectedDate.format()}</p>
+        <p>Selected Date: {dateValue && dateValue.format()}</p>
         <DateInput 
           placeholder="Pick a date..."
-          value={selectedDate} 
+          value={dateValue} 
           onChange={this.handleDateChange}
         />
 
         <h2>TimeInput</h2>
-        <p>Selected Time: {selectedTime && selectedTime.value.format()}</p>
+        <p>Selected Time: {timeValue && timeValue.format()}</p>
         <TimeInput 
           placeholder="Type a time..."
-          value={this.state.timeValue} 
+          value={timeValue} 
           onChange={this.handleTimeChange}
         />
         <div><button>something else to focus</button></div>
