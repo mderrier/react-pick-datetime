@@ -1,3 +1,10 @@
+### v0.4.1 (2014-04-04)
+
+#### BUGFIX
+
+- Instead of storing a tuple of a date and a formatted value and trying to box and unbox, just make `value` the a `moment` date that we pass around in `<TimeInput>`. This should have no impact on implementing apps except for significant bug reductions.
+- Add support for `inputValueFormat` in `<TimeInput>`.
+
 ### v0.4.0 (2014-04-04)
 
 #### CHANGES

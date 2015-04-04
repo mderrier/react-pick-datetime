@@ -25,8 +25,6 @@ var App = React.createClass({
   render: function() {
     var {dateValue, timeValue} = this.state;
 
-    console.log(timeValue)
-
     return (
       <div>
         <h1>react-pick-datetime</h1>

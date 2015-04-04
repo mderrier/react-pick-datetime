@@ -4,7 +4,6 @@ var {Combobox} = require('react-pick');
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
-var emptyFunction = require('react-pick/lib/helpers/emptyFunction');
 
 var TimeInput = React.createClass({
 
@@ -33,8 +32,11 @@ var TimeInput = React.createClass({
       amount: React.PropTypes.number
     }),
 
-    onChange: React.PropTypes.func.isRequired,
-    onComplete: React.PropTypes.func
+    /**
+     * The format of the time shown and parsed in the `<input> box.
+     * Default is `'LT'`.
+     */
+    inputValueFormat: React.PropTypes.string
   },
 
   getDefaultProps: function() {
@@ -42,7 +44,7 @@ var TimeInput = React.createClass({
       start: moment().startOf('day'),
       end: moment().endOf('day'),
       increment: {amount: 5, unit: 'minutes'},
-      onComplete: emptyFunction
+      inputValueFormat: 'LT'
     };
   },
 
@@ -52,11 +54,7 @@ var TimeInput = React.createClass({
     var options = [];
 
     while (time.isBefore(this.props.end)) {
-      options.push({
-        formatted: time.format('LT'), 
-        value: moment(time)
-      });
-
+      options.push(moment(time));
       time.add(amount, unit);
     }
 
@@ -70,22 +68,14 @@ var TimeInput = React.createClass({
         return;
       }
 
-      resolve(this.getOptions().filter(function ({formatted}) {
-        return formatted.indexOf(inputValue) === 0;
+      resolve(this.getOptions().filter((option) => {
+        return this.getLabelForOption(option).indexOf(inputValue) === 0;
       }));
     });
   },
 
   getLabelForOption: function(option) {
-    return option.formatted;
-  },
-
-  handleChange: function(value) {
-    this.props.onChange(value.value);
-  },
-
-  handleComplete: function(value) {
-    this.props.onComplete(value.value);
+    return option.format(this.props.inputValueFormat);
   },
 
   render: function() {
@@ -94,8 +84,6 @@ var TimeInput = React.createClass({
         {...this.props}
         getLabelForOption={this.getLabelForOption}
         getOptionsForInputValue={this.getOptionsForInputValue}
-        onChange={this.handleChange}
-        onComplete={this.handleComplete}
       />
     );
   }
