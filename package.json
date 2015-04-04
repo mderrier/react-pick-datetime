@@ -19,7 +19,7 @@
   "homepage": "https://github.com/hellojwilde/react-pick-datetime",
   "dependencies": {
     "moment": "^2.9.0",
-    "react-pick": "^0.3.1"
+    "react-pick": "^0.3.2"
   },
   "peerDependences": {
     "react": "^0.13.1"
