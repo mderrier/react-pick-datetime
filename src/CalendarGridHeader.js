@@ -21,7 +21,7 @@ function getDayHeadings(month) {
   return headings;
 }
 
-var DatePopupGridHeader = React.createClass({
+var CalendarGridHeader = React.createClass({
 
   mixins: [PureRenderMixin],
 
@@ -47,4 +47,4 @@ var DatePopupGridHeader = React.createClass({
 
 });
 
-module.exports = DatePopupGridHeader;
+module.exports = CalendarGridHeader;

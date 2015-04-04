@@ -1,5 +1,5 @@
-var DatePopupGrid = require('./DatePopupGrid');
-var DatePopupHeader = require('./DatePopupHeader');
+var CalendarGrid = require('./CalendarGrid');
+var CalendarHeader = require('./CalendarHeader');
 var React = require('react/addons');
 
 var {PureRenderMixin} = React.addons;
@@ -8,7 +8,7 @@ var moment = require('moment');
 var joinClasses = require('react/lib/joinClasses');
 var getUniqueId = require('react-pick/lib/helpers/getUniqueId');
 
-var DatePopup = React.createClass({
+var Calendar = React.createClass({
 
   mixins: [PureRenderMixin],
 
@@ -29,7 +29,7 @@ var DatePopup = React.createClass({
 
   getInitialState: function() {
     return {
-      id: getUniqueId('DatePopup') 
+      id: getUniqueId('Calendar') 
     };
   },
 
@@ -54,12 +54,12 @@ var DatePopup = React.createClass({
     } = this.props;
 
     return (
-      <div {...otherProps} className={joinClasses('DatePopup', className)}>
-        <DatePopupHeader
+      <div {...otherProps} className={joinClasses('Calendar', className)}>
+        <CalendarHeader
           {...{month, onMonthChange}}
           getHeadingId={this.getHeadingId}
         />
-        <DatePopupGrid
+        <CalendarGrid
           {...{month, value, onChange, onComplete, onCancel}}
           ref="grid"
           aria-labelledby={this.getHeadingId()}
@@ -71,4 +71,4 @@ var DatePopup = React.createClass({
 
 });
 
-module.exports = DatePopup;
+module.exports = Calendar;

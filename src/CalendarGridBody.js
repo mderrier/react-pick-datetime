@@ -32,7 +32,7 @@ function getWeeks(month, value) {
   return weeks;
 }
 
-var DatePopupGridBody = React.createClass({
+var CalendarGridBody = React.createClass({
 
   mixins: [PureRenderMixin],
 
@@ -64,10 +64,10 @@ var DatePopupGridBody = React.createClass({
               <td 
                 aria-selected={day.isSelected+''}
                 className={joinClasses(
-                  'DatePopupGridBody-day',
-                  day.isToday && 'DatePopupGridBody-day--isToday',
-                  day.isOtherMonth && 'DatePopupGridBody-day--isOtherMonth',
-                  day.isValue && 'DatePopupGridBody-day--isValue'
+                  'CalendarGridBody-day',
+                  day.isToday && 'CalendarGridBody-day--isToday',
+                  day.isOtherMonth && 'CalendarGridBody-day--isOtherMonth',
+                  day.isValue && 'CalendarGridBody-day--isValue'
                 )}
                 id={this.props.getDescendantIdForDay(day.value)}
                 key={idx}
@@ -84,4 +84,4 @@ var DatePopupGridBody = React.createClass({
 
 });
 
-module.exports = DatePopupGridBody;
+module.exports = CalendarGridBody;

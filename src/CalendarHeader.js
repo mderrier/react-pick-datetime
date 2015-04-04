@@ -4,7 +4,7 @@ var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
 
-var DatePopupHeader = React.createClass({
+var CalendarHeader = React.createClass({
 
   mixins: [PureRenderMixin],
 
@@ -23,19 +23,19 @@ var DatePopupHeader = React.createClass({
   },
 
   render: function() {
-    var {getHeadingId, month} = this.props
+    var {getHeadingId, month} = this.props;
 
     return (
-      <div className="DatePopupHeader">
+      <div className="CalendarHeader">
         <button 
-          className="DatePopupHeader-previousButton"
+          className="CalendarHeader-previousButton"
           onClick={this.handlePreviousButtonClick}
           tabIndex="0">
           &#9664;
         </button>
 
         <button 
-          className="DatePopupHeader-nextButton"
+          className="CalendarHeader-nextButton"
           onClick={this.handleNextButtonClick}
           tabIndex="0">
           &#9654;
@@ -44,7 +44,7 @@ var DatePopupHeader = React.createClass({
         <div 
           aria-live="assertive"
           aria-atomic="true"
-          className="DatePopupHeader-heading"
+          className="CalendarHeader-heading"
           id={getHeadingId()}
           role="heading">
           {month.format('MMMM YYYY')}
@@ -55,4 +55,4 @@ var DatePopupHeader = React.createClass({
 
 });
 
-module.exports = DatePopupHeader;
+module.exports = CalendarHeader;

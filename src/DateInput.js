@@ -1,8 +1,8 @@
 var DateInput = require('./DateInput');
 var DateInputButton = require('./DateInputButton');
-var DatePopup = require('./DatePopup');
+var Calendar = require('./Calendar');
 var React = require('react/addons');
-var {InputPopupWrapper} = require('react-pick');
+var {InputWithPopup} = require('react-pick');
 
 var {PureRenderMixin} = React.addons;
 
@@ -38,25 +38,16 @@ var DateInput = React.createClass({
     inputValueFormat: React.PropTypes.string,
 
     /**
-     * The component to render for the input.
-     * Default is `input`.
-     */
-    inputComponent: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.function
-    ]),
-
-    /**
      * The component to render for the button that lets you toggle the popup.
      * Default is `DateInputButton`.
      */
     buttonComponent: React.PropTypes.func,
 
     /**
-     * The component to render for the date popup.
-     * Default is `DatePopup`.
+     * The component to render for the calendar in the popup.
+     * Default is `Calendar`.
      */
-    popupComponent: React.PropTypes.func
+    calendarComponent: React.PropTypes.func
   },
 
   getDefaultProps: function() {
@@ -66,7 +57,7 @@ var DateInput = React.createClass({
       onComplete: emptyFunction,
       inputComponent: 'input',
       buttonComponent: DateInputButton,
-      popupComponent: DatePopup
+      calendarComponent: Calendar
     };
   },
 
@@ -80,22 +71,27 @@ var DateInput = React.createClass({
     };
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    if (this.props.value !== nextProps.value && 
+        nextProps.value !== null) {
+      this.setState({
+        inputValue: nextProps.value.format(nextProps.inputValueFormat),
+        popupMonth: nextProps.value
+      });
+    }
+  },
+
   handlePopupMonthChange: function(popupMonth) {
     this.setState({popupMonth});
   },
 
   handlePopupChange: function(value) {
-    this.setState({
-      inputValue: value.format(this.props.inputValueFormat),
-      popupMonth: value || this.state.popupMonth
-    });
-
     this.props.onChange(value);
   },
 
   handlePopupComplete: function(value) {
-    this.handlePopupChange(value);
     this.setState({isOpen: false});
+    this.props.onChange(value);
     this.props.onComplete(value);
   },
 
@@ -105,16 +101,16 @@ var DateInput = React.createClass({
 
   handleInputChange: function(event) {
     var inputValue = event.target.value;
-    var {inputValueFormat, onChange} = this.props;
+    var inputValueFormat = this.props.inputValueFormat;
 
     this.setState({inputValue});
 
     var parsedInputValue = moment(inputValue, inputValueFormat, true);
     if (parsedInputValue.isValid()) {
       this.setState({popupMonth: parsedInputValue});
-      onChange(parsedInputValue);
+      this.props.onChange(parsedInputValue);
     } else {
-      onChange(null);
+      this.props.onChange(null);
     }
   },
 
@@ -124,39 +120,29 @@ var DateInput = React.createClass({
     });
   },
 
-  renderPopup: function() {
-    var PopupComponent = this.props.popupComponent;
-
-    return (
-      <PopupComponent 
-        ref="popup"
-        month={this.state.popupMonth}
-        value={this.props.value}
-        onMonthChange={this.handlePopupMonthChange}
-        onChange={this.handlePopupChange}
-        onComplete={this.handlePopupComplete}
-        onCancel={this.handlePopupCancel}
-      />
-    );
-  },
-
   render: function() {
     var ButtonComponent = this.props.buttonComponent;
-    var InputComponent = this.props.inputComponent;
+    var PopupComponent = this.props.calendarComponent;
 
     return (
       <div className="DateInput">
-        <InputPopupWrapper 
+        <InputWithPopup
+          {...this.props}
           isOpen={this.state.isOpen} 
-          popupElement={this.renderPopup()}>
-          <InputComponent
-            {...this.props}
-            value={this.state.inputValue}
-            onFocus={this.handleInputFocus}
-            onBlur={this.handleInputBlur}
-            onChange={this.handleInputChange}
+          value={this.state.inputValue}
+          onFocus={this.handleInputFocus}
+          onBlur={this.handleInputBlur}
+          onChange={this.handleInputChange}>
+          <PopupComponent 
+            ref="popup"
+            month={this.state.popupMonth}
+            value={this.props.value}
+            onMonthChange={this.handlePopupMonthChange}
+            onChange={this.handlePopupChange}
+            onComplete={this.handlePopupComplete}
+            onCancel={this.handlePopupCancel}
           />
-        </InputPopupWrapper>
+        </InputWithPopup>
         <ButtonComponent
           aria-hidden="true" 
           onClick={this.handleButtonClick}

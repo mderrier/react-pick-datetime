@@ -1,3 +1,14 @@
+### v0.5.0 (2014-05-04)
+
+#### BUGFIX
+
+- `DateInput` should update its internal correctly now when an outside component changes its `value` property.
+
+#### CHANGES
+
+- Move onto v0.5.0 of `react-pick` and rectify everything to work with its changes. Drop `inputComponent` as an option.
+- Expose `Calendar` as a widget publicly.
+
 ### v0.4.1 (2014-04-04)
 
 #### BUGFIX
