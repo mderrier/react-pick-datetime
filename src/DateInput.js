@@ -32,6 +32,15 @@ var DateInput = React.createClass({
     inputValueFormat: React.PropTypes.string,
 
     /**
+     * The component to render for the input.
+     * Default is `input`.
+     */
+    inputComponent: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.function
+    ]),
+
+    /**
      * The component to render for the button that lets you toggle the popup.
      * Default is `DateInputButton`.
      */
@@ -41,13 +50,14 @@ var DateInput = React.createClass({
      * The component to render for the date popup.
      * Default is `DatePopup`.
      */
-    popupComponent: React.PropTypes.func,
+    popupComponent: React.PropTypes.func
   },
 
   getDefaultProps: function() {
     return {
       value: null,
       inputValueFormat: 'l',
+      inputComponent: 'input',
       buttonComponent: DateInputButton,
       popupComponent: DatePopup
     };
@@ -124,14 +134,16 @@ var DateInput = React.createClass({
 
   render: function() {
     var ButtonComponent = this.props.buttonComponent;
+    var InputComponent = this.props.inputComponent;
     var {className, ...otherProps} = this.props;
 
     return (
-      <div {...otherProps} className={joinClasses('DateInput', className)}>
+      <div className={joinClasses('DateInput', className)}>
         <InputPopupWrapper 
           isOpen={this.state.isOpen} 
           popupElement={this.renderPopup()}>
-          <input
+          <InputComponent
+            {...otherProps}
             value={this.state.inputValue}
             onFocus={this.handleInputFocus}
             onBlur={this.handleInputBlur}
