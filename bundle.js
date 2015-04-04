@@ -75,8 +75,6 @@
 	    var dateValue = _state.dateValue;
 	    var timeValue = _state.timeValue;
 
-	    console.log(timeValue);
-
 	    return React.createElement(
 	      "div",
 	      null,
@@ -149,7 +147,6 @@
 	var PureRenderMixin = React.addons.PureRenderMixin;
 
 	var moment = __webpack_require__(15);
-	var emptyFunction = __webpack_require__(9);
 
 	var TimeInput = React.createClass({
 	  displayName: "TimeInput",
@@ -179,8 +176,11 @@
 	      amount: React.PropTypes.number
 	    }),
 
-	    onChange: React.PropTypes.func.isRequired,
-	    onComplete: React.PropTypes.func
+	    /**
+	     * The format of the time shown and parsed in the `<input> box.
+	     * Default is `'LT'`.
+	     */
+	    inputValueFormat: React.PropTypes.string
 	  },
 
 	  getDefaultProps: function getDefaultProps() {
@@ -188,7 +188,7 @@
 	      start: moment().startOf("day"),
 	      end: moment().endOf("day"),
 	      increment: { amount: 5, unit: "minutes" },
-	      onComplete: emptyFunction
+	      inputValueFormat: "LT"
 	    };
 	  },
 
@@ -201,11 +201,7 @@
 	    var options = [];
 
 	    while (time.isBefore(this.props.end)) {
-	      options.push({
-	        formatted: time.format("LT"),
-	        value: moment(time)
-	      });
-
+	      options.push(moment(time));
 	      time.add(amount, unit);
 	    }
 
@@ -221,32 +217,20 @@
 	        return;
 	      }
 
-	      resolve(_this.getOptions().filter(function (_ref) {
-	        var formatted = _ref.formatted;
-
-	        return formatted.indexOf(inputValue) === 0;
+	      resolve(_this.getOptions().filter(function (option) {
+	        return _this.getLabelForOption(option).indexOf(inputValue) === 0;
 	      }));
 	    });
 	  },
 
 	  getLabelForOption: function getLabelForOption(option) {
-	    return option.formatted;
-	  },
-
-	  handleChange: function handleChange(value) {
-	    this.props.onChange(value.value);
-	  },
-
-	  handleComplete: function handleComplete(value) {
-	    this.props.onComplete(value.value);
+	    return option.format(this.props.inputValueFormat);
 	  },
 
 	  render: function render() {
 	    return React.createElement(Combobox, _extends({}, this.props, {
 	      getLabelForOption: this.getLabelForOption,
-	      getOptionsForInputValue: this.getOptionsForInputValue,
-	      onChange: this.handleChange,
-	      onComplete: this.handleComplete
+	      getOptionsForInputValue: this.getOptionsForInputValue
 	    }));
 	  }
 
@@ -263,8 +247,8 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var DateInput = __webpack_require__(2);
-	var DateInputButton = __webpack_require__(10);
-	var DatePopup = __webpack_require__(11);
+	var DateInputButton = __webpack_require__(9);
+	var DatePopup = __webpack_require__(10);
 	var React = __webpack_require__(8);
 
 	var _require = __webpack_require__(12);
@@ -273,7 +257,7 @@
 	var PureRenderMixin = React.addons.PureRenderMixin;
 
 	var moment = __webpack_require__(15);
-	var emptyFunction = __webpack_require__(9);
+	var emptyFunction = __webpack_require__(11);
 
 	var DateInput = React.createClass({
 	  displayName: "DateInput",
@@ -520,23 +504,13 @@
 
 	"use strict";
 
-	function emptyFunction() {}
-
-	module.exports = emptyFunction;
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
 	var _objectWithoutProperties = function (obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; };
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(3);
 
-	var joinClasses = __webpack_require__(18);
+	var joinClasses = __webpack_require__(20);
 
 	var DateInputButton = React.createClass({
 	  displayName: "DateInputButton",
@@ -561,7 +535,7 @@
 	module.exports = DateInputButton;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -570,14 +544,14 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var DatePopupGrid = __webpack_require__(19);
-	var DatePopupHeader = __webpack_require__(20);
+	var DatePopupGrid = __webpack_require__(18);
+	var DatePopupHeader = __webpack_require__(19);
 	var React = __webpack_require__(8);
 
 	var PureRenderMixin = React.addons.PureRenderMixin;
 
 	var moment = __webpack_require__(15);
-	var joinClasses = __webpack_require__(18);
+	var joinClasses = __webpack_require__(20);
 	var getUniqueId = __webpack_require__(21);
 
 	var DatePopup = React.createClass({
@@ -643,6 +617,16 @@
 	});
 
 	module.exports = DatePopup;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	function emptyFunction() {}
+
+	module.exports = emptyFunction;
 
 /***/ },
 /* 12 */
@@ -3910,7 +3894,7 @@
 	        makeGlobal();
 	    }
 	}).call(undefined);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(145)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(144)(module)))
 
 /***/ },
 /* 16 */
@@ -4045,7 +4029,7 @@
 	React.version = "0.13.1";
 
 	module.exports = React;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 17 */
@@ -4102,54 +4086,10 @@
 	}
 
 	module.exports = React;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule joinClasses
-	 * @typechecks static-only
-	 */
-
-	"use strict";
-
-	/**
-	 * Combines multiple className strings into one.
-	 * http://jsperf.com/joinclasses-args-vs-array
-	 *
-	 * @param {...?string} classes
-	 * @return {string}
-	 */
-	function joinClasses(className /*, ... */) {
-	  if (!className) {
-	    className = "";
-	  }
-	  var nextClass;
-	  var argLength = arguments.length;
-	  if (argLength > 1) {
-	    for (var ii = 1; ii < argLength; ii++) {
-	      nextClass = arguments[ii];
-	      if (nextClass) {
-	        className = (className ? className + " " : "") + nextClass;
-	      }
-	    }
-	  }
-	  return className;
-	}
-
-	module.exports = joinClasses;
-
-/***/ },
-/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4229,7 +4169,7 @@
 	module.exports = DatePopupGrid;
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4301,6 +4241,50 @@
 	module.exports = DatePopupHeader;
 
 /***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule joinClasses
+	 * @typechecks static-only
+	 */
+
+	"use strict";
+
+	/**
+	 * Combines multiple className strings into one.
+	 * http://jsperf.com/joinclasses-args-vs-array
+	 *
+	 * @param {...?string} classes
+	 * @return {string}
+	 */
+	function joinClasses(className /*, ... */) {
+	  if (!className) {
+	    className = "";
+	  }
+	  var nextClass;
+	  var argLength = arguments.length;
+	  if (argLength > 1) {
+	    for (var ii = 1; ii < argLength; ii++) {
+	      nextClass = arguments[ii];
+	      if (nextClass) {
+	        className = (className ? className + " " : "") + nextClass;
+	      }
+	    }
+	  }
+	  return className;
+	}
+
+	module.exports = joinClasses;
+
+/***/ },
 /* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4344,7 +4328,7 @@
 
 	var PureRenderMixin = React.addons.PureRenderMixin;
 
-	var emptyFunction = __webpack_require__(9);
+	var emptyFunction = __webpack_require__(11);
 	var getUniqueId = __webpack_require__(21);
 
 	/**
@@ -4578,7 +4562,7 @@
 	var PureRenderMixin = _React$addons.PureRenderMixin;
 	var cloneWithProps = _React$addons.cloneWithProps;
 
-	var joinClasses = __webpack_require__(18);
+	var joinClasses = __webpack_require__(20);
 	var getUniqueId = __webpack_require__(21);
 
 	/**
@@ -4657,7 +4641,7 @@
 
 	var PureRenderMixin = React.addons.PureRenderMixin;
 
-	var joinClasses = __webpack_require__(18);
+	var joinClasses = __webpack_require__(20);
 
 	/**
 	 * <ListPopup> is a component that renders the list that Combobox displays.
@@ -4835,7 +4819,7 @@
 
 	var PureRenderMixin = React.addons.PureRenderMixin;
 
-	var emptyFunction = __webpack_require__(9);
+	var emptyFunction = __webpack_require__(11);
 
 	var KEY_BACKSPACE = 8;
 
@@ -4958,166 +4942,166 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./af": 65,
-		"./af.js": 65,
-		"./ar": 69,
-		"./ar-ma": 66,
-		"./ar-ma.js": 66,
-		"./ar-sa": 67,
-		"./ar-sa.js": 67,
-		"./ar-tn": 68,
-		"./ar-tn.js": 68,
-		"./ar.js": 69,
-		"./az": 70,
-		"./az.js": 70,
-		"./be": 71,
-		"./be.js": 71,
-		"./bg": 72,
-		"./bg.js": 72,
-		"./bn": 73,
-		"./bn.js": 73,
-		"./bo": 74,
-		"./bo.js": 74,
-		"./br": 75,
-		"./br.js": 75,
-		"./bs": 76,
-		"./bs.js": 76,
-		"./ca": 77,
-		"./ca.js": 77,
-		"./cs": 78,
-		"./cs.js": 78,
-		"./cv": 79,
-		"./cv.js": 79,
-		"./cy": 80,
-		"./cy.js": 80,
-		"./da": 81,
-		"./da.js": 81,
-		"./de": 83,
-		"./de-at": 82,
-		"./de-at.js": 82,
-		"./de.js": 83,
-		"./el": 84,
-		"./el.js": 84,
-		"./en-au": 85,
-		"./en-au.js": 85,
-		"./en-ca": 86,
-		"./en-ca.js": 86,
-		"./en-gb": 87,
-		"./en-gb.js": 87,
-		"./eo": 88,
-		"./eo.js": 88,
-		"./es": 89,
-		"./es.js": 89,
-		"./et": 90,
-		"./et.js": 90,
-		"./eu": 91,
-		"./eu.js": 91,
-		"./fa": 92,
-		"./fa.js": 92,
-		"./fi": 93,
-		"./fi.js": 93,
-		"./fo": 94,
-		"./fo.js": 94,
-		"./fr": 96,
-		"./fr-ca": 95,
-		"./fr-ca.js": 95,
-		"./fr.js": 96,
-		"./fy": 97,
-		"./fy.js": 97,
-		"./gl": 98,
-		"./gl.js": 98,
-		"./he": 99,
-		"./he.js": 99,
-		"./hi": 100,
-		"./hi.js": 100,
-		"./hr": 101,
-		"./hr.js": 101,
-		"./hu": 102,
-		"./hu.js": 102,
-		"./hy-am": 103,
-		"./hy-am.js": 103,
-		"./id": 104,
-		"./id.js": 104,
-		"./is": 105,
-		"./is.js": 105,
-		"./it": 106,
-		"./it.js": 106,
-		"./ja": 107,
-		"./ja.js": 107,
-		"./ka": 108,
-		"./ka.js": 108,
-		"./km": 109,
-		"./km.js": 109,
-		"./ko": 110,
-		"./ko.js": 110,
-		"./lb": 111,
-		"./lb.js": 111,
-		"./lt": 112,
-		"./lt.js": 112,
-		"./lv": 113,
-		"./lv.js": 113,
-		"./mk": 114,
-		"./mk.js": 114,
-		"./ml": 115,
-		"./ml.js": 115,
-		"./mr": 116,
-		"./mr.js": 116,
-		"./ms-my": 117,
-		"./ms-my.js": 117,
-		"./my": 118,
-		"./my.js": 118,
-		"./nb": 119,
-		"./nb.js": 119,
-		"./ne": 120,
-		"./ne.js": 120,
-		"./nl": 121,
-		"./nl.js": 121,
-		"./nn": 122,
-		"./nn.js": 122,
-		"./pl": 123,
-		"./pl.js": 123,
-		"./pt": 125,
-		"./pt-br": 124,
-		"./pt-br.js": 124,
-		"./pt.js": 125,
-		"./ro": 126,
-		"./ro.js": 126,
-		"./ru": 127,
-		"./ru.js": 127,
-		"./sk": 128,
-		"./sk.js": 128,
-		"./sl": 129,
-		"./sl.js": 129,
-		"./sq": 130,
-		"./sq.js": 130,
-		"./sr": 132,
-		"./sr-cyrl": 131,
-		"./sr-cyrl.js": 131,
-		"./sr.js": 132,
-		"./sv": 133,
-		"./sv.js": 133,
-		"./ta": 134,
-		"./ta.js": 134,
-		"./th": 135,
-		"./th.js": 135,
-		"./tl-ph": 136,
-		"./tl-ph.js": 136,
-		"./tr": 137,
-		"./tr.js": 137,
-		"./tzm": 139,
-		"./tzm-latn": 138,
-		"./tzm-latn.js": 138,
-		"./tzm.js": 139,
-		"./uk": 140,
-		"./uk.js": 140,
-		"./uz": 141,
-		"./uz.js": 141,
-		"./vi": 142,
-		"./vi.js": 142,
-		"./zh-cn": 143,
-		"./zh-cn.js": 143,
-		"./zh-tw": 144,
-		"./zh-tw.js": 144
+		"./af": 64,
+		"./af.js": 64,
+		"./ar": 68,
+		"./ar-ma": 65,
+		"./ar-ma.js": 65,
+		"./ar-sa": 66,
+		"./ar-sa.js": 66,
+		"./ar-tn": 67,
+		"./ar-tn.js": 67,
+		"./ar.js": 68,
+		"./az": 69,
+		"./az.js": 69,
+		"./be": 70,
+		"./be.js": 70,
+		"./bg": 71,
+		"./bg.js": 71,
+		"./bn": 72,
+		"./bn.js": 72,
+		"./bo": 73,
+		"./bo.js": 73,
+		"./br": 74,
+		"./br.js": 74,
+		"./bs": 75,
+		"./bs.js": 75,
+		"./ca": 76,
+		"./ca.js": 76,
+		"./cs": 77,
+		"./cs.js": 77,
+		"./cv": 78,
+		"./cv.js": 78,
+		"./cy": 79,
+		"./cy.js": 79,
+		"./da": 80,
+		"./da.js": 80,
+		"./de": 82,
+		"./de-at": 81,
+		"./de-at.js": 81,
+		"./de.js": 82,
+		"./el": 83,
+		"./el.js": 83,
+		"./en-au": 84,
+		"./en-au.js": 84,
+		"./en-ca": 85,
+		"./en-ca.js": 85,
+		"./en-gb": 86,
+		"./en-gb.js": 86,
+		"./eo": 87,
+		"./eo.js": 87,
+		"./es": 88,
+		"./es.js": 88,
+		"./et": 89,
+		"./et.js": 89,
+		"./eu": 90,
+		"./eu.js": 90,
+		"./fa": 91,
+		"./fa.js": 91,
+		"./fi": 92,
+		"./fi.js": 92,
+		"./fo": 93,
+		"./fo.js": 93,
+		"./fr": 95,
+		"./fr-ca": 94,
+		"./fr-ca.js": 94,
+		"./fr.js": 95,
+		"./fy": 96,
+		"./fy.js": 96,
+		"./gl": 97,
+		"./gl.js": 97,
+		"./he": 98,
+		"./he.js": 98,
+		"./hi": 99,
+		"./hi.js": 99,
+		"./hr": 100,
+		"./hr.js": 100,
+		"./hu": 101,
+		"./hu.js": 101,
+		"./hy-am": 102,
+		"./hy-am.js": 102,
+		"./id": 103,
+		"./id.js": 103,
+		"./is": 104,
+		"./is.js": 104,
+		"./it": 105,
+		"./it.js": 105,
+		"./ja": 106,
+		"./ja.js": 106,
+		"./ka": 107,
+		"./ka.js": 107,
+		"./km": 108,
+		"./km.js": 108,
+		"./ko": 109,
+		"./ko.js": 109,
+		"./lb": 110,
+		"./lb.js": 110,
+		"./lt": 111,
+		"./lt.js": 111,
+		"./lv": 112,
+		"./lv.js": 112,
+		"./mk": 113,
+		"./mk.js": 113,
+		"./ml": 114,
+		"./ml.js": 114,
+		"./mr": 115,
+		"./mr.js": 115,
+		"./ms-my": 116,
+		"./ms-my.js": 116,
+		"./my": 117,
+		"./my.js": 117,
+		"./nb": 118,
+		"./nb.js": 118,
+		"./ne": 119,
+		"./ne.js": 119,
+		"./nl": 120,
+		"./nl.js": 120,
+		"./nn": 121,
+		"./nn.js": 121,
+		"./pl": 122,
+		"./pl.js": 122,
+		"./pt": 124,
+		"./pt-br": 123,
+		"./pt-br.js": 123,
+		"./pt.js": 124,
+		"./ro": 125,
+		"./ro.js": 125,
+		"./ru": 126,
+		"./ru.js": 126,
+		"./sk": 127,
+		"./sk.js": 127,
+		"./sl": 128,
+		"./sl.js": 128,
+		"./sq": 129,
+		"./sq.js": 129,
+		"./sr": 131,
+		"./sr-cyrl": 130,
+		"./sr-cyrl.js": 130,
+		"./sr.js": 131,
+		"./sv": 132,
+		"./sv.js": 132,
+		"./ta": 133,
+		"./ta.js": 133,
+		"./th": 134,
+		"./th.js": 134,
+		"./tl-ph": 135,
+		"./tl-ph.js": 135,
+		"./tr": 136,
+		"./tr.js": 136,
+		"./tzm": 138,
+		"./tzm-latn": 137,
+		"./tzm-latn.js": 137,
+		"./tzm.js": 138,
+		"./uk": 139,
+		"./uk.js": 139,
+		"./uz": 140,
+		"./uz.js": 140,
+		"./vi": 141,
+		"./vi.js": 141,
+		"./zh-cn": 142,
+		"./zh-cn.js": 142,
+		"./zh-tw": 143,
+		"./zh-tw.js": 143
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -5335,7 +5319,7 @@
 	};
 
 	module.exports = EventPluginUtils;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 29 */
@@ -5481,7 +5465,7 @@
 	};
 
 	module.exports = ReactChildren;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 30 */
@@ -5603,7 +5587,7 @@
 	module.exports = ReactComponent;
 
 	// IE will fail on defineProperty (es5-shim/sham too)
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 31 */
@@ -6472,7 +6456,7 @@
 	module.exports = ReactClass;
 
 	// IE will fail on defineProperty (es5-shim/sham too)
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 32 */
@@ -6548,7 +6532,7 @@
 	};
 
 	module.exports = ReactContext;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 33 */
@@ -6866,7 +6850,7 @@
 	module.exports = ReactElement;
 
 	// IE will fail on defineProperty
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 35 */
@@ -7265,7 +7249,7 @@
 	module.exports = ReactElementValidator;
 
 	// IE will fail on defineProperty (es5-shim/sham too)
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 36 */
@@ -7445,7 +7429,7 @@
 	}, createDOMFactory);
 
 	module.exports = ReactDOM;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 37 */
@@ -7694,7 +7678,7 @@
 	module.exports = {
 	  inject: inject
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 39 */
@@ -7996,7 +7980,7 @@
 
 	module.exports = ReactInstanceHandles;
 	/* until break */
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 40 */
@@ -8721,7 +8705,7 @@
 	});
 
 	module.exports = ReactMount;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 41 */
@@ -8823,7 +8807,7 @@
 	}
 
 	module.exports = ReactPerf;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 42 */
@@ -9261,7 +9245,7 @@
 	};
 
 	module.exports = ReactReconciler;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 44 */
@@ -9337,7 +9321,7 @@
 	  renderToString: renderToString,
 	  renderToStaticMarkup: renderToStaticMarkup
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 45 */
@@ -9445,7 +9429,7 @@
 	}
 
 	module.exports = findDOMNode;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 47 */
@@ -9484,7 +9468,7 @@
 	}
 
 	module.exports = onlyChild;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 48 */
@@ -9547,8 +9531,8 @@
 
 	"use strict";
 
-	var ReactLink = __webpack_require__(208);
-	var ReactStateSetters = __webpack_require__(209);
+	var ReactLink = __webpack_require__(207);
+	var ReactStateSetters = __webpack_require__(208);
 
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -9587,7 +9571,7 @@
 
 	"use strict";
 
-	var shallowEqual = __webpack_require__(207);
+	var shallowEqual = __webpack_require__(209);
 
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -9837,7 +9821,7 @@
 	};
 
 	module.exports = ReactFragment;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 53 */
@@ -9857,7 +9841,7 @@
 	"use strict";
 
 	var React = __webpack_require__(16);
-	var ReactTransitionChildMapping = __webpack_require__(212);
+	var ReactTransitionChildMapping = __webpack_require__(211);
 
 	var assign = __webpack_require__(45);
 	var cloneWithProps = __webpack_require__(56);
@@ -10065,12 +10049,12 @@
 
 	"use strict";
 
-	var CallbackQueue = __webpack_require__(219);
+	var CallbackQueue = __webpack_require__(212);
 	var PooledClass = __webpack_require__(148);
 	var ReactCurrentOwner = __webpack_require__(33);
 	var ReactPerf = __webpack_require__(41);
 	var ReactReconciler = __webpack_require__(43);
-	var Transaction = __webpack_require__(220);
+	var Transaction = __webpack_require__(213);
 
 	var assign = __webpack_require__(45);
 	var invariant = __webpack_require__(147);
@@ -10278,7 +10262,7 @@
 	};
 
 	module.exports = ReactUpdates;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 55 */
@@ -10332,7 +10316,7 @@
 	}
 
 	module.exports = cx;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 56 */
@@ -10353,7 +10337,7 @@
 	"use strict";
 
 	var ReactElement = __webpack_require__(34);
-	var ReactPropTransferer = __webpack_require__(211);
+	var ReactPropTransferer = __webpack_require__(214);
 
 	var keyOf = __webpack_require__(158);
 	var warning = __webpack_require__(150);
@@ -10387,7 +10371,7 @@
 	}
 
 	module.exports = cloneWithProps;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 57 */
@@ -10497,7 +10481,7 @@
 	}
 
 	module.exports = update;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 58 */
@@ -10518,11 +10502,11 @@
 	"use strict";
 
 	var DOMProperty = __webpack_require__(194);
-	var ReactDefaultPerfAnalysis = __webpack_require__(213);
+	var ReactDefaultPerfAnalysis = __webpack_require__(215);
 	var ReactMount = __webpack_require__(40);
 	var ReactPerf = __webpack_require__(41);
 
-	var performanceNow = __webpack_require__(214);
+	var performanceNow = __webpack_require__(216);
 
 	function roundFloat(val) {
 	  return Math.floor(val * 100) / 100;
@@ -10750,18 +10734,18 @@
 	"use strict";
 
 	var EventConstants = __webpack_require__(146);
-	var EventPluginHub = __webpack_require__(215);
-	var EventPropagators = __webpack_require__(216);
+	var EventPluginHub = __webpack_require__(217);
+	var EventPropagators = __webpack_require__(218);
 	var React = __webpack_require__(16);
 	var ReactElement = __webpack_require__(34);
 	var ReactEmptyComponent = __webpack_require__(196);
 	var ReactBrowserEventEmitter = __webpack_require__(195);
-	var ReactCompositeComponent = __webpack_require__(217);
+	var ReactCompositeComponent = __webpack_require__(219);
 	var ReactInstanceHandles = __webpack_require__(39);
 	var ReactInstanceMap = __webpack_require__(153);
 	var ReactMount = __webpack_require__(40);
 	var ReactUpdates = __webpack_require__(54);
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 
 	var assign = __webpack_require__(45);
 
@@ -11172,7 +11156,7 @@
 	var PureRenderMixin = React.addons.PureRenderMixin;
 
 	var moment = __webpack_require__(15);
-	var joinClasses = __webpack_require__(18);
+	var joinClasses = __webpack_require__(20);
 
 	function getWeeks(month, value) {
 	  var today = moment();
@@ -11435,7 +11419,7 @@
 	var cloneWithProps = _React$addons.cloneWithProps;
 	var PureRenderMixin = _React$addons.PureRenderMixin;
 
-	var emptyFunction = __webpack_require__(9);
+	var emptyFunction = __webpack_require__(11);
 
 	var KEY_ARROW_DOWN = 40;
 	var KEY_ARROW_UP = 38;
@@ -11559,75 +11543,6 @@
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// shim for using process in browser
-
-	"use strict";
-
-	var process = module.exports = {};
-	var queue = [];
-	var draining = false;
-
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    draining = true;
-	    var currentQueue;
-	    var len = queue.length;
-	    while (len) {
-	        currentQueue = queue;
-	        queue = [];
-	        var i = -1;
-	        while (++i < len) {
-	            currentQueue[i]();
-	        }
-	        len = queue.length;
-	    }
-	    draining = false;
-	}
-	process.nextTick = function (fun) {
-	    queue.push(fun);
-	    if (!draining) {
-	        setTimeout(drainQueue, 0);
-	    }
-	};
-
-	process.title = "browser";
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ""; // empty string to avoid regexp issues
-	process.versions = {};
-
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-
-	process.binding = function (name) {
-	    throw new Error("process.binding is not supported");
-	};
-
-	// TODO(shtylman)
-	process.cwd = function () {
-	    return "/";
-	};
-	process.chdir = function (dir) {
-	    throw new Error("process.chdir is not supported");
-	};
-	process.umask = function () {
-	    return 0;
-	};
-
-/***/ },
-/* 65 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
 	// locale : afrikaans (af)
 	// author : Werner Mollentze : https://github.com/wernerm
@@ -11703,7 +11618,7 @@
 	});
 
 /***/ },
-/* 66 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -11767,7 +11682,7 @@
 	});
 
 /***/ },
-/* 67 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -11876,7 +11791,7 @@
 	});
 
 /***/ },
-/* 68 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -11938,7 +11853,7 @@
 	});
 
 /***/ },
-/* 69 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12071,7 +11986,7 @@
 	});
 
 /***/ },
-/* 70 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12186,7 +12101,7 @@
 	});
 
 /***/ },
-/* 71 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12339,7 +12254,7 @@
 	});
 
 /***/ },
-/* 72 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12434,7 +12349,7 @@
 	});
 
 /***/ },
-/* 73 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12552,7 +12467,7 @@
 	});
 
 /***/ },
-/* 74 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12667,7 +12582,7 @@
 	});
 
 /***/ },
-/* 75 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12792,7 +12707,7 @@
 	});
 
 /***/ },
-/* 76 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -12939,7 +12854,7 @@
 	});
 
 /***/ },
-/* 77 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13020,7 +12935,7 @@
 	});
 
 /***/ },
-/* 78 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13196,7 +13111,7 @@
 	});
 
 /***/ },
-/* 79 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13264,7 +13179,7 @@
 	});
 
 /***/ },
-/* 80 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13349,7 +13264,7 @@
 	});
 
 /***/ },
-/* 81 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13414,7 +13329,7 @@
 	});
 
 /***/ },
-/* 82 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13495,7 +13410,7 @@
 	});
 
 /***/ },
-/* 83 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13575,7 +13490,7 @@
 	});
 
 /***/ },
-/* 84 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13677,7 +13592,7 @@
 	});
 
 /***/ },
-/* 85 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13745,7 +13660,7 @@
 	});
 
 /***/ },
-/* 86 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13810,7 +13725,7 @@
 	});
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13879,7 +13794,7 @@
 	});
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -13957,7 +13872,7 @@
 	});
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14051,7 +13966,7 @@
 	});
 
 /***/ },
-/* 90 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14136,7 +14051,7 @@
 	});
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14205,7 +14120,7 @@
 	});
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14316,7 +14231,7 @@
 	});
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14427,7 +14342,7 @@
 	});
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14492,7 +14407,7 @@
 	});
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14555,7 +14470,7 @@
 	});
 
 /***/ },
-/* 96 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14622,7 +14537,7 @@
 	});
 
 /***/ },
-/* 97 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14698,7 +14613,7 @@
 	});
 
 /***/ },
-/* 98 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14778,7 +14693,7 @@
 	});
 
 /***/ },
-/* 99 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14865,7 +14780,7 @@
 	});
 
 /***/ },
-/* 100 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -14993,7 +14908,7 @@
 	});
 
 /***/ },
-/* 101 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15141,7 +15056,7 @@
 	});
 
 /***/ },
-/* 102 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15259,7 +15174,7 @@
 	});
 
 /***/ },
-/* 103 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15381,7 +15296,7 @@
 	});
 
 /***/ },
-/* 104 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15469,7 +15384,7 @@
 	});
 
 /***/ },
-/* 105 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15602,7 +15517,7 @@
 	});
 
 /***/ },
-/* 106 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15677,7 +15592,7 @@
 	});
 
 /***/ },
-/* 107 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15747,7 +15662,7 @@
 	});
 
 /***/ },
-/* 108 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15855,7 +15770,7 @@
 	});
 
 /***/ },
-/* 109 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15918,7 +15833,7 @@
 	});
 
 /***/ },
-/* 110 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -15990,7 +15905,7 @@
 	});
 
 /***/ },
-/* 111 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16153,7 +16068,7 @@
 	});
 
 /***/ },
-/* 112 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16280,7 +16195,7 @@
 	});
 
 /***/ },
-/* 113 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16366,7 +16281,7 @@
 	});
 
 /***/ },
-/* 114 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16461,7 +16376,7 @@
 	});
 
 /***/ },
-/* 115 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16537,7 +16452,7 @@
 	});
 
 /***/ },
-/* 116 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16663,7 +16578,7 @@
 	});
 
 /***/ },
-/* 117 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16750,7 +16665,7 @@
 	});
 
 /***/ },
-/* 118 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16847,7 +16762,7 @@
 	});
 
 /***/ },
-/* 119 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -16913,7 +16828,7 @@
 	});
 
 /***/ },
-/* 120 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17041,7 +16956,7 @@
 	});
 
 /***/ },
-/* 121 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17117,7 +17032,7 @@
 	});
 
 /***/ },
-/* 122 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17182,7 +17097,7 @@
 	});
 
 /***/ },
-/* 123 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17289,7 +17204,7 @@
 	});
 
 /***/ },
-/* 124 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17353,7 +17268,7 @@
 	});
 
 /***/ },
-/* 125 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17421,7 +17336,7 @@
 	});
 
 /***/ },
-/* 126 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17501,7 +17416,7 @@
 	});
 
 /***/ },
-/* 127 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17674,7 +17589,7 @@
 	});
 
 /***/ },
-/* 128 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -17851,7 +17766,7 @@
 	});
 
 /***/ },
-/* 129 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18004,7 +17919,7 @@
 	});
 
 /***/ },
-/* 130 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18078,7 +17993,7 @@
 	});
 
 /***/ },
-/* 131 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18184,7 +18099,7 @@
 	});
 
 /***/ },
-/* 132 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18290,7 +18205,7 @@
 	});
 
 /***/ },
-/* 133 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18359,7 +18274,7 @@
 	});
 
 /***/ },
-/* 134 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18495,7 +18410,7 @@
 	});
 
 /***/ },
-/* 135 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18565,7 +18480,7 @@
 	});
 
 /***/ },
-/* 136 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18632,7 +18547,7 @@
 	});
 
 /***/ },
-/* 137 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18734,7 +18649,7 @@
 	});
 
 /***/ },
-/* 138 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18797,7 +18712,7 @@
 	});
 
 /***/ },
-/* 139 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -18860,7 +18775,7 @@
 	});
 
 /***/ },
-/* 140 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -19020,7 +18935,7 @@
 	});
 
 /***/ },
-/* 141 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -19083,7 +18998,7 @@
 	});
 
 /***/ },
-/* 142 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -19154,7 +19069,7 @@
 	});
 
 /***/ },
-/* 143 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -19285,7 +19200,7 @@
 	});
 
 /***/ },
-/* 144 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// moment.js locale configuration
@@ -19391,7 +19306,7 @@
 	});
 
 /***/ },
-/* 145 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -19405,6 +19320,75 @@
 			module.webpackPolyfill = 1;
 		}
 		return module;
+	};
+
+/***/ },
+/* 145 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// shim for using process in browser
+
+	"use strict";
+
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    draining = true;
+	    var currentQueue;
+	    var len = queue.length;
+	    while (len) {
+	        currentQueue = queue;
+	        queue = [];
+	        var i = -1;
+	        while (++i < len) {
+	            currentQueue[i]();
+	        }
+	        len = queue.length;
+	    }
+	    draining = false;
+	}
+	process.nextTick = function (fun) {
+	    queue.push(fun);
+	    if (!draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+
+	process.title = "browser";
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ""; // empty string to avoid regexp issues
+	process.versions = {};
+
+	function noop() {}
+
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+
+	process.binding = function (name) {
+	    throw new Error("process.binding is not supported");
+	};
+
+	// TODO(shtylman)
+	process.cwd = function () {
+	    return "/";
+	};
+	process.chdir = function (dir) {
+	    throw new Error("process.chdir is not supported");
+	};
+	process.umask = function () {
+	    return 0;
 	};
 
 /***/ },
@@ -19535,7 +19519,7 @@
 	};
 
 	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 148 */
@@ -19650,7 +19634,7 @@
 	};
 
 	module.exports = PooledClass;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 149 */
@@ -19842,7 +19826,7 @@
 	}
 
 	module.exports = traverseAllChildren;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 150 */
@@ -19904,7 +19888,7 @@
 	}
 
 	module.exports = warning;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 151 */
@@ -20142,7 +20126,7 @@
 	};
 
 	module.exports = ReactUpdateQueue;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 152 */
@@ -20326,7 +20310,7 @@
 	}
 
 	module.exports = ReactPropTypeLocationNames;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 157 */
@@ -20380,7 +20364,7 @@
 	};
 
 	module.exports = keyMirror;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 158 */
@@ -20446,7 +20430,7 @@
 	}
 
 	module.exports = emptyObject;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 160 */
@@ -20551,7 +20535,7 @@
 	};
 
 	module.exports = ReactNativeComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 161 */
@@ -20819,7 +20803,7 @@
 	};
 
 	module.exports = DOMPropertyOperations;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 164 */
@@ -21298,7 +21282,7 @@
 	};
 
 	module.exports = ReactDOMComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 166 */
@@ -21362,7 +21346,7 @@
 	"use strict";
 
 	var EventConstants = __webpack_require__(146);
-	var EventPropagators = __webpack_require__(216);
+	var EventPropagators = __webpack_require__(218);
 	var ExecutionEnvironment = __webpack_require__(48);
 	var FallbackCompositionState = __webpack_require__(225);
 	var SyntheticCompositionEvent = __webpack_require__(226);
@@ -21771,11 +21755,11 @@
 	"use strict";
 
 	var EventConstants = __webpack_require__(146);
-	var EventPluginHub = __webpack_require__(215);
-	var EventPropagators = __webpack_require__(216);
+	var EventPluginHub = __webpack_require__(217);
+	var EventPropagators = __webpack_require__(218);
 	var ExecutionEnvironment = __webpack_require__(48);
 	var ReactUpdates = __webpack_require__(54);
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 
 	var isEventSupported = __webpack_require__(224);
 	var isTextInputElement = __webpack_require__(228);
@@ -22153,7 +22137,7 @@
 	"use strict";
 
 	var EventConstants = __webpack_require__(146);
-	var EventPropagators = __webpack_require__(216);
+	var EventPropagators = __webpack_require__(218);
 	var SyntheticMouseEvent = __webpack_require__(229);
 
 	var ReactMount = __webpack_require__(40);
@@ -22560,7 +22544,7 @@
 	"use strict";
 
 	var ReactUpdates = __webpack_require__(54);
-	var Transaction = __webpack_require__(220);
+	var Transaction = __webpack_require__(213);
 
 	var assign = __webpack_require__(45);
 	var emptyFunction = __webpack_require__(203);
@@ -22940,7 +22924,7 @@
 	});
 
 	module.exports = ReactDOMIDOperations;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 180 */
@@ -23153,7 +23137,7 @@
 	});
 
 	module.exports = ReactDOMInput;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 182 */
@@ -23203,7 +23187,7 @@
 	});
 
 	module.exports = ReactDOMOption;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 183 */
@@ -23507,7 +23491,7 @@
 	});
 
 	module.exports = ReactDOMTextarea;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 185 */
@@ -23691,7 +23675,7 @@
 	"use strict";
 
 	var DOMProperty = __webpack_require__(194);
-	var EventPluginHub = __webpack_require__(215);
+	var EventPluginHub = __webpack_require__(217);
 	var ReactComponentEnvironment = __webpack_require__(237);
 	var ReactClass = __webpack_require__(31);
 	var ReactEmptyComponent = __webpack_require__(196);
@@ -23736,12 +23720,12 @@
 
 	"use strict";
 
-	var CallbackQueue = __webpack_require__(219);
+	var CallbackQueue = __webpack_require__(212);
 	var PooledClass = __webpack_require__(148);
 	var ReactBrowserEventEmitter = __webpack_require__(195);
 	var ReactInputSelection = __webpack_require__(238);
 	var ReactPutListenerQueue = __webpack_require__(239);
-	var Transaction = __webpack_require__(220);
+	var Transaction = __webpack_require__(213);
 
 	var assign = __webpack_require__(45);
 
@@ -23909,14 +23893,14 @@
 	"use strict";
 
 	var EventConstants = __webpack_require__(146);
-	var EventPropagators = __webpack_require__(216);
+	var EventPropagators = __webpack_require__(218);
 	var ReactInputSelection = __webpack_require__(238);
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 
 	var getActiveElement = __webpack_require__(240);
 	var isTextInputElement = __webpack_require__(228);
 	var keyOf = __webpack_require__(158);
-	var shallowEqual = __webpack_require__(207);
+	var shallowEqual = __webpack_require__(209);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -24122,9 +24106,9 @@
 
 	var EventConstants = __webpack_require__(146);
 	var EventPluginUtils = __webpack_require__(28);
-	var EventPropagators = __webpack_require__(216);
+	var EventPropagators = __webpack_require__(218);
 	var SyntheticClipboardEvent = __webpack_require__(241);
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 	var SyntheticFocusEvent = __webpack_require__(242);
 	var SyntheticKeyboardEvent = __webpack_require__(243);
 	var SyntheticMouseEvent = __webpack_require__(229);
@@ -24514,7 +24498,7 @@
 	};
 
 	module.exports = SimpleEventPlugin;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 191 */
@@ -24666,7 +24650,7 @@
 	}
 
 	module.exports = createFullPageComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 193 */
@@ -24961,7 +24945,7 @@
 	};
 
 	module.exports = DOMProperty;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 195 */
@@ -24982,7 +24966,7 @@
 	"use strict";
 
 	var EventConstants = __webpack_require__(146);
-	var EventPluginHub = __webpack_require__(215);
+	var EventPluginHub = __webpack_require__(217);
 	var EventPluginRegistry = __webpack_require__(249);
 	var ReactEventEmitterMixin = __webpack_require__(250);
 	var ViewportMetrics = __webpack_require__(251);
@@ -25354,7 +25338,7 @@
 	};
 
 	module.exports = ReactEmptyComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 197 */
@@ -25518,7 +25502,7 @@
 
 	"use strict";
 
-	var ReactCompositeComponent = __webpack_require__(217);
+	var ReactCompositeComponent = __webpack_require__(219);
 	var ReactEmptyComponent = __webpack_require__(196);
 	var ReactNativeComponent = __webpack_require__(160);
 
@@ -25614,7 +25598,7 @@
 	}
 
 	module.exports = instantiateReactComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 201 */
@@ -25785,7 +25769,7 @@
 	}
 
 	module.exports = shouldUpdateReactComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 203 */
@@ -25920,9 +25904,9 @@
 	"use strict";
 
 	var PooledClass = __webpack_require__(148);
-	var CallbackQueue = __webpack_require__(219);
+	var CallbackQueue = __webpack_require__(212);
 	var ReactPutListenerQueue = __webpack_require__(239);
-	var Transaction = __webpack_require__(220);
+	var Transaction = __webpack_require__(213);
 
 	var assign = __webpack_require__(45);
 	var emptyFunction = __webpack_require__(203);
@@ -26049,52 +26033,6 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule shallowEqual
-	 */
-
-	"use strict";
-
-	/**
-	 * Performs equality by iterating through keys on an object and returning
-	 * false when any key has values which are not strictly equal between
-	 * objA and objB. Returns true when the values of all keys are strictly equal.
-	 *
-	 * @return {boolean}
-	 */
-	function shallowEqual(objA, objB) {
-	  if (objA === objB) {
-	    return true;
-	  }
-	  var key;
-	  // Test for A's keys different from B.
-	  for (key in objA) {
-	    if (objA.hasOwnProperty(key) && (!objB.hasOwnProperty(key) || objA[key] !== objB[key])) {
-	      return false;
-	    }
-	  }
-	  // Test for B's keys missing from A.
-	  for (key in objB) {
-	    if (objB.hasOwnProperty(key) && !objA.hasOwnProperty(key)) {
-	      return false;
-	    }
-	  }
-	  return true;
-	}
-
-	module.exports = shallowEqual;
-
-/***/ },
-/* 208 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
 	 * @providesModule ReactLink
 	 * @typechecks static-only
 	 */
@@ -26158,7 +26096,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 209 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26275,6 +26213,52 @@
 	};
 
 	module.exports = ReactStateSetters;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule shallowEqual
+	 */
+
+	"use strict";
+
+	/**
+	 * Performs equality by iterating through keys on an object and returning
+	 * false when any key has values which are not strictly equal between
+	 * objA and objB. Returns true when the values of all keys are strictly equal.
+	 *
+	 * @return {boolean}
+	 */
+	function shallowEqual(objA, objB) {
+	  if (objA === objB) {
+	    return true;
+	  }
+	  var key;
+	  // Test for A's keys different from B.
+	  for (key in objA) {
+	    if (objA.hasOwnProperty(key) && (!objB.hasOwnProperty(key) || objA[key] !== objB[key])) {
+	      return false;
+	    }
+	  }
+	  // Test for B's keys missing from A.
+	  for (key in objB) {
+	    if (objB.hasOwnProperty(key) && !objA.hasOwnProperty(key)) {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+
+	module.exports = shallowEqual;
 
 /***/ },
 /* 210 */
@@ -26424,123 +26408,10 @@
 	});
 
 	module.exports = ReactCSSTransitionGroupChild;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 211 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactPropTransferer
-	 */
-
-	"use strict";
-
-	var assign = __webpack_require__(45);
-	var emptyFunction = __webpack_require__(203);
-	var joinClasses = __webpack_require__(18);
-
-	/**
-	 * Creates a transfer strategy that will merge prop values using the supplied
-	 * `mergeStrategy`. If a prop was previously unset, this just sets it.
-	 *
-	 * @param {function} mergeStrategy
-	 * @return {function}
-	 */
-	function createTransferStrategy(mergeStrategy) {
-	  return function (props, key, value) {
-	    if (!props.hasOwnProperty(key)) {
-	      props[key] = value;
-	    } else {
-	      props[key] = mergeStrategy(props[key], value);
-	    }
-	  };
-	}
-
-	var transferStrategyMerge = createTransferStrategy(function (a, b) {
-	  // `merge` overrides the first object's (`props[key]` above) keys using the
-	  // second object's (`value`) keys. An object's style's existing `propA` would
-	  // get overridden. Flip the order here.
-	  return assign({}, b, a);
-	});
-
-	/**
-	 * Transfer strategies dictate how props are transferred by `transferPropsTo`.
-	 * NOTE: if you add any more exceptions to this list you should be sure to
-	 * update `cloneWithProps()` accordingly.
-	 */
-	var TransferStrategies = {
-	  /**
-	   * Never transfer `children`.
-	   */
-	  children: emptyFunction,
-	  /**
-	   * Transfer the `className` prop by merging them.
-	   */
-	  className: createTransferStrategy(joinClasses),
-	  /**
-	   * Transfer the `style` prop (which is an object) by merging them.
-	   */
-	  style: transferStrategyMerge
-	};
-
-	/**
-	 * Mutates the first argument by transferring the properties from the second
-	 * argument.
-	 *
-	 * @param {object} props
-	 * @param {object} newProps
-	 * @return {object}
-	 */
-	function transferInto(props, newProps) {
-	  for (var thisKey in newProps) {
-	    if (!newProps.hasOwnProperty(thisKey)) {
-	      continue;
-	    }
-
-	    var transferStrategy = TransferStrategies[thisKey];
-
-	    if (transferStrategy && TransferStrategies.hasOwnProperty(thisKey)) {
-	      transferStrategy(props, thisKey, newProps[thisKey]);
-	    } else if (!props.hasOwnProperty(thisKey)) {
-	      props[thisKey] = newProps[thisKey];
-	    }
-	  }
-	  return props;
-	}
-
-	/**
-	 * ReactPropTransferer are capable of transferring props to another component
-	 * using a `transferPropsTo` method.
-	 *
-	 * @class ReactPropTransferer
-	 */
-	var ReactPropTransferer = {
-
-	  /**
-	   * Merge two props objects using TransferStrategies.
-	   *
-	   * @param {object} oldProps original props (they take precedence)
-	   * @param {object} newProps new props to merge in
-	   * @return {object} a new object containing both sets of props merged.
-	   */
-	  mergeProps: function mergeProps(oldProps, newProps) {
-	    return transferInto(assign({}, oldProps), newProps);
-	  }
-
-	};
-
-	module.exports = ReactPropTransferer;
-
-/***/ },
-/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26646,7 +26517,450 @@
 	module.exports = ReactTransitionChildMapping;
 
 /***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule CallbackQueue
+	 */
+
+	"use strict";
+
+	var PooledClass = __webpack_require__(148);
+
+	var assign = __webpack_require__(45);
+	var invariant = __webpack_require__(147);
+
+	/**
+	 * A specialized pseudo-event module to help keep track of components waiting to
+	 * be notified when their DOM representations are available for use.
+	 *
+	 * This implements `PooledClass`, so you should never need to instantiate this.
+	 * Instead, use `CallbackQueue.getPooled()`.
+	 *
+	 * @class ReactMountReady
+	 * @implements PooledClass
+	 * @internal
+	 */
+	function CallbackQueue() {
+	  this._callbacks = null;
+	  this._contexts = null;
+	}
+
+	assign(CallbackQueue.prototype, {
+
+	  /**
+	   * Enqueues a callback to be invoked when `notifyAll` is invoked.
+	   *
+	   * @param {function} callback Invoked when `notifyAll` is invoked.
+	   * @param {?object} context Context to call `callback` with.
+	   * @internal
+	   */
+	  enqueue: function enqueue(callback, context) {
+	    this._callbacks = this._callbacks || [];
+	    this._contexts = this._contexts || [];
+	    this._callbacks.push(callback);
+	    this._contexts.push(context);
+	  },
+
+	  /**
+	   * Invokes all enqueued callbacks and clears the queue. This is invoked after
+	   * the DOM representation of a component has been created or updated.
+	   *
+	   * @internal
+	   */
+	  notifyAll: function notifyAll() {
+	    var callbacks = this._callbacks;
+	    var contexts = this._contexts;
+	    if (callbacks) {
+	      "production" !== process.env.NODE_ENV ? invariant(callbacks.length === contexts.length, "Mismatched list of contexts in callback queue") : invariant(callbacks.length === contexts.length);
+	      this._callbacks = null;
+	      this._contexts = null;
+	      for (var i = 0, l = callbacks.length; i < l; i++) {
+	        callbacks[i].call(contexts[i]);
+	      }
+	      callbacks.length = 0;
+	      contexts.length = 0;
+	    }
+	  },
+
+	  /**
+	   * Resets the internal queue.
+	   *
+	   * @internal
+	   */
+	  reset: function reset() {
+	    this._callbacks = null;
+	    this._contexts = null;
+	  },
+
+	  /**
+	   * `PooledClass` looks for this.
+	   */
+	  destructor: function destructor() {
+	    this.reset();
+	  }
+
+	});
+
+	PooledClass.addPoolingTo(CallbackQueue);
+
+	module.exports = CallbackQueue;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
+
+/***/ },
 /* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Transaction
+	 */
+
+	"use strict";
+
+	var invariant = __webpack_require__(147);
+
+	/**
+	 * `Transaction` creates a black box that is able to wrap any method such that
+	 * certain invariants are maintained before and after the method is invoked
+	 * (Even if an exception is thrown while invoking the wrapped method). Whoever
+	 * instantiates a transaction can provide enforcers of the invariants at
+	 * creation time. The `Transaction` class itself will supply one additional
+	 * automatic invariant for you - the invariant that any transaction instance
+	 * should not be run while it is already being run. You would typically create a
+	 * single instance of a `Transaction` for reuse multiple times, that potentially
+	 * is used to wrap several different methods. Wrappers are extremely simple -
+	 * they only require implementing two methods.
+	 *
+	 * <pre>
+	 *                       wrappers (injected at creation time)
+	 *                                      +        +
+	 *                                      |        |
+	 *                    +-----------------|--------|--------------+
+	 *                    |                 v        |              |
+	 *                    |      +---------------+   |              |
+	 *                    |   +--|    wrapper1   |---|----+         |
+	 *                    |   |  +---------------+   v    |         |
+	 *                    |   |          +-------------+  |         |
+	 *                    |   |     +----|   wrapper2  |--------+   |
+	 *                    |   |     |    +-------------+  |     |   |
+	 *                    |   |     |                     |     |   |
+	 *                    |   v     v                     v     v   | wrapper
+	 *                    | +---+ +---+   +---------+   +---+ +---+ | invariants
+	 * perform(anyMethod) | |   | |   |   |         |   |   | |   | | maintained
+	 * +----------------->|-|---|-|---|-->|anyMethod|---|---|-|---|-|-------->
+	 *                    | |   | |   |   |         |   |   | |   | |
+	 *                    | |   | |   |   |         |   |   | |   | |
+	 *                    | |   | |   |   |         |   |   | |   | |
+	 *                    | +---+ +---+   +---------+   +---+ +---+ |
+	 *                    |  initialize                    close    |
+	 *                    +-----------------------------------------+
+	 * </pre>
+	 *
+	 * Use cases:
+	 * - Preserving the input selection ranges before/after reconciliation.
+	 *   Restoring selection even in the event of an unexpected error.
+	 * - Deactivating events while rearranging the DOM, preventing blurs/focuses,
+	 *   while guaranteeing that afterwards, the event system is reactivated.
+	 * - Flushing a queue of collected DOM mutations to the main UI thread after a
+	 *   reconciliation takes place in a worker thread.
+	 * - Invoking any collected `componentDidUpdate` callbacks after rendering new
+	 *   content.
+	 * - (Future use case): Wrapping particular flushes of the `ReactWorker` queue
+	 *   to preserve the `scrollTop` (an automatic scroll aware DOM).
+	 * - (Future use case): Layout calculations before and after DOM updates.
+	 *
+	 * Transactional plugin API:
+	 * - A module that has an `initialize` method that returns any precomputation.
+	 * - and a `close` method that accepts the precomputation. `close` is invoked
+	 *   when the wrapped process is completed, or has failed.
+	 *
+	 * @param {Array<TransactionalWrapper>} transactionWrapper Wrapper modules
+	 * that implement `initialize` and `close`.
+	 * @return {Transaction} Single transaction for reuse in thread.
+	 *
+	 * @class Transaction
+	 */
+	var Mixin = {
+	  /**
+	   * Sets up this instance so that it is prepared for collecting metrics. Does
+	   * so such that this setup method may be used on an instance that is already
+	   * initialized, in a way that does not consume additional memory upon reuse.
+	   * That can be useful if you decide to make your subclass of this mixin a
+	   * "PooledClass".
+	   */
+	  reinitializeTransaction: function reinitializeTransaction() {
+	    this.transactionWrappers = this.getTransactionWrappers();
+	    if (!this.wrapperInitData) {
+	      this.wrapperInitData = [];
+	    } else {
+	      this.wrapperInitData.length = 0;
+	    }
+	    this._isInTransaction = false;
+	  },
+
+	  _isInTransaction: false,
+
+	  /**
+	   * @abstract
+	   * @return {Array<TransactionWrapper>} Array of transaction wrappers.
+	   */
+	  getTransactionWrappers: null,
+
+	  isInTransaction: function isInTransaction() {
+	    return !!this._isInTransaction;
+	  },
+
+	  /**
+	   * Executes the function within a safety window. Use this for the top level
+	   * methods that result in large amounts of computation/mutations that would
+	   * need to be safety checked.
+	   *
+	   * @param {function} method Member of scope to call.
+	   * @param {Object} scope Scope to invoke from.
+	   * @param {Object?=} args... Arguments to pass to the method (optional).
+	   *                           Helps prevent need to bind in many cases.
+	   * @return Return value from `method`.
+	   */
+	  perform: function perform(method, scope, a, b, c, d, e, f) {
+	    "production" !== process.env.NODE_ENV ? invariant(!this.isInTransaction(), "Transaction.perform(...): Cannot initialize a transaction when there " + "is already an outstanding transaction.") : invariant(!this.isInTransaction());
+	    var errorThrown;
+	    var ret;
+	    try {
+	      this._isInTransaction = true;
+	      // Catching errors makes debugging more difficult, so we start with
+	      // errorThrown set to true before setting it to false after calling
+	      // close -- if it's still set to true in the finally block, it means
+	      // one of these calls threw.
+	      errorThrown = true;
+	      this.initializeAll(0);
+	      ret = method.call(scope, a, b, c, d, e, f);
+	      errorThrown = false;
+	    } finally {
+	      try {
+	        if (errorThrown) {
+	          // If `method` throws, prefer to show that stack trace over any thrown
+	          // by invoking `closeAll`.
+	          try {
+	            this.closeAll(0);
+	          } catch (err) {}
+	        } else {
+	          // Since `method` didn't throw, we don't want to silence the exception
+	          // here.
+	          this.closeAll(0);
+	        }
+	      } finally {
+	        this._isInTransaction = false;
+	      }
+	    }
+	    return ret;
+	  },
+
+	  initializeAll: function initializeAll(startIndex) {
+	    var transactionWrappers = this.transactionWrappers;
+	    for (var i = startIndex; i < transactionWrappers.length; i++) {
+	      var wrapper = transactionWrappers[i];
+	      try {
+	        // Catching errors makes debugging more difficult, so we start with the
+	        // OBSERVED_ERROR state before overwriting it with the real return value
+	        // of initialize -- if it's still set to OBSERVED_ERROR in the finally
+	        // block, it means wrapper.initialize threw.
+	        this.wrapperInitData[i] = Transaction.OBSERVED_ERROR;
+	        this.wrapperInitData[i] = wrapper.initialize ? wrapper.initialize.call(this) : null;
+	      } finally {
+	        if (this.wrapperInitData[i] === Transaction.OBSERVED_ERROR) {
+	          // The initializer for wrapper i threw an error; initialize the
+	          // remaining wrappers but silence any exceptions from them to ensure
+	          // that the first error is the one to bubble up.
+	          try {
+	            this.initializeAll(i + 1);
+	          } catch (err) {}
+	        }
+	      }
+	    }
+	  },
+
+	  /**
+	   * Invokes each of `this.transactionWrappers.close[i]` functions, passing into
+	   * them the respective return values of `this.transactionWrappers.init[i]`
+	   * (`close`rs that correspond to initializers that failed will not be
+	   * invoked).
+	   */
+	  closeAll: function closeAll(startIndex) {
+	    "production" !== process.env.NODE_ENV ? invariant(this.isInTransaction(), "Transaction.closeAll(): Cannot close transaction when none are open.") : invariant(this.isInTransaction());
+	    var transactionWrappers = this.transactionWrappers;
+	    for (var i = startIndex; i < transactionWrappers.length; i++) {
+	      var wrapper = transactionWrappers[i];
+	      var initData = this.wrapperInitData[i];
+	      var errorThrown;
+	      try {
+	        // Catching errors makes debugging more difficult, so we start with
+	        // errorThrown set to true before setting it to false after calling
+	        // close -- if it's still set to true in the finally block, it means
+	        // wrapper.close threw.
+	        errorThrown = true;
+	        if (initData !== Transaction.OBSERVED_ERROR && wrapper.close) {
+	          wrapper.close.call(this, initData);
+	        }
+	        errorThrown = false;
+	      } finally {
+	        if (errorThrown) {
+	          // The closer for wrapper i threw an error; close the remaining
+	          // wrappers but silence any exceptions from them to ensure that the
+	          // first error is the one to bubble up.
+	          try {
+	            this.closeAll(i + 1);
+	          } catch (e) {}
+	        }
+	      }
+	    }
+	    this.wrapperInitData.length = 0;
+	  }
+	};
+
+	var Transaction = {
+
+	  Mixin: Mixin,
+
+	  /**
+	   * Token to look for to determine if an error occured.
+	   */
+	  OBSERVED_ERROR: {}
+
+	};
+
+	module.exports = Transaction;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactPropTransferer
+	 */
+
+	"use strict";
+
+	var assign = __webpack_require__(45);
+	var emptyFunction = __webpack_require__(203);
+	var joinClasses = __webpack_require__(20);
+
+	/**
+	 * Creates a transfer strategy that will merge prop values using the supplied
+	 * `mergeStrategy`. If a prop was previously unset, this just sets it.
+	 *
+	 * @param {function} mergeStrategy
+	 * @return {function}
+	 */
+	function createTransferStrategy(mergeStrategy) {
+	  return function (props, key, value) {
+	    if (!props.hasOwnProperty(key)) {
+	      props[key] = value;
+	    } else {
+	      props[key] = mergeStrategy(props[key], value);
+	    }
+	  };
+	}
+
+	var transferStrategyMerge = createTransferStrategy(function (a, b) {
+	  // `merge` overrides the first object's (`props[key]` above) keys using the
+	  // second object's (`value`) keys. An object's style's existing `propA` would
+	  // get overridden. Flip the order here.
+	  return assign({}, b, a);
+	});
+
+	/**
+	 * Transfer strategies dictate how props are transferred by `transferPropsTo`.
+	 * NOTE: if you add any more exceptions to this list you should be sure to
+	 * update `cloneWithProps()` accordingly.
+	 */
+	var TransferStrategies = {
+	  /**
+	   * Never transfer `children`.
+	   */
+	  children: emptyFunction,
+	  /**
+	   * Transfer the `className` prop by merging them.
+	   */
+	  className: createTransferStrategy(joinClasses),
+	  /**
+	   * Transfer the `style` prop (which is an object) by merging them.
+	   */
+	  style: transferStrategyMerge
+	};
+
+	/**
+	 * Mutates the first argument by transferring the properties from the second
+	 * argument.
+	 *
+	 * @param {object} props
+	 * @param {object} newProps
+	 * @return {object}
+	 */
+	function transferInto(props, newProps) {
+	  for (var thisKey in newProps) {
+	    if (!newProps.hasOwnProperty(thisKey)) {
+	      continue;
+	    }
+
+	    var transferStrategy = TransferStrategies[thisKey];
+
+	    if (transferStrategy && TransferStrategies.hasOwnProperty(thisKey)) {
+	      transferStrategy(props, thisKey, newProps[thisKey]);
+	    } else if (!props.hasOwnProperty(thisKey)) {
+	      props[thisKey] = newProps[thisKey];
+	    }
+	  }
+	  return props;
+	}
+
+	/**
+	 * ReactPropTransferer are capable of transferring props to another component
+	 * using a `transferPropsTo` method.
+	 *
+	 * @class ReactPropTransferer
+	 */
+	var ReactPropTransferer = {
+
+	  /**
+	   * Merge two props objects using TransferStrategies.
+	   *
+	   * @param {object} oldProps original props (they take precedence)
+	   * @param {object} newProps new props to merge in
+	   * @return {object} a new object containing both sets of props merged.
+	   */
+	  mergeProps: function mergeProps(oldProps, newProps) {
+	    return transferInto(assign({}, oldProps), newProps);
+	  }
+
+	};
+
+	module.exports = ReactPropTransferer;
+
+/***/ },
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26849,7 +27163,7 @@
 	module.exports = ReactDefaultPerfAnalysis;
 
 /***/ },
-/* 214 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26882,7 +27196,7 @@
 	module.exports = performanceNow;
 
 /***/ },
-/* 215 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27135,10 +27449,10 @@
 	};
 
 	module.exports = EventPluginHub;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
-/* 216 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27155,7 +27469,7 @@
 	"use strict";
 
 	var EventConstants = __webpack_require__(146);
-	var EventPluginHub = __webpack_require__(215);
+	var EventPluginHub = __webpack_require__(217);
 
 	var accumulateInto = __webpack_require__(258);
 	var forEachAccumulated = __webpack_require__(259);
@@ -27262,10 +27576,10 @@
 	};
 
 	module.exports = EventPropagators;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
-/* 217 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27963,10 +28277,10 @@
 	};
 
 	module.exports = ReactCompositeComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
-/* 218 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28131,336 +28445,6 @@
 	PooledClass.addPoolingTo(SyntheticEvent, PooledClass.threeArgumentPooler);
 
 	module.exports = SyntheticEvent;
-
-/***/ },
-/* 219 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule CallbackQueue
-	 */
-
-	"use strict";
-
-	var PooledClass = __webpack_require__(148);
-
-	var assign = __webpack_require__(45);
-	var invariant = __webpack_require__(147);
-
-	/**
-	 * A specialized pseudo-event module to help keep track of components waiting to
-	 * be notified when their DOM representations are available for use.
-	 *
-	 * This implements `PooledClass`, so you should never need to instantiate this.
-	 * Instead, use `CallbackQueue.getPooled()`.
-	 *
-	 * @class ReactMountReady
-	 * @implements PooledClass
-	 * @internal
-	 */
-	function CallbackQueue() {
-	  this._callbacks = null;
-	  this._contexts = null;
-	}
-
-	assign(CallbackQueue.prototype, {
-
-	  /**
-	   * Enqueues a callback to be invoked when `notifyAll` is invoked.
-	   *
-	   * @param {function} callback Invoked when `notifyAll` is invoked.
-	   * @param {?object} context Context to call `callback` with.
-	   * @internal
-	   */
-	  enqueue: function enqueue(callback, context) {
-	    this._callbacks = this._callbacks || [];
-	    this._contexts = this._contexts || [];
-	    this._callbacks.push(callback);
-	    this._contexts.push(context);
-	  },
-
-	  /**
-	   * Invokes all enqueued callbacks and clears the queue. This is invoked after
-	   * the DOM representation of a component has been created or updated.
-	   *
-	   * @internal
-	   */
-	  notifyAll: function notifyAll() {
-	    var callbacks = this._callbacks;
-	    var contexts = this._contexts;
-	    if (callbacks) {
-	      "production" !== process.env.NODE_ENV ? invariant(callbacks.length === contexts.length, "Mismatched list of contexts in callback queue") : invariant(callbacks.length === contexts.length);
-	      this._callbacks = null;
-	      this._contexts = null;
-	      for (var i = 0, l = callbacks.length; i < l; i++) {
-	        callbacks[i].call(contexts[i]);
-	      }
-	      callbacks.length = 0;
-	      contexts.length = 0;
-	    }
-	  },
-
-	  /**
-	   * Resets the internal queue.
-	   *
-	   * @internal
-	   */
-	  reset: function reset() {
-	    this._callbacks = null;
-	    this._contexts = null;
-	  },
-
-	  /**
-	   * `PooledClass` looks for this.
-	   */
-	  destructor: function destructor() {
-	    this.reset();
-	  }
-
-	});
-
-	PooledClass.addPoolingTo(CallbackQueue);
-
-	module.exports = CallbackQueue;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
-
-/***/ },
-/* 220 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule Transaction
-	 */
-
-	"use strict";
-
-	var invariant = __webpack_require__(147);
-
-	/**
-	 * `Transaction` creates a black box that is able to wrap any method such that
-	 * certain invariants are maintained before and after the method is invoked
-	 * (Even if an exception is thrown while invoking the wrapped method). Whoever
-	 * instantiates a transaction can provide enforcers of the invariants at
-	 * creation time. The `Transaction` class itself will supply one additional
-	 * automatic invariant for you - the invariant that any transaction instance
-	 * should not be run while it is already being run. You would typically create a
-	 * single instance of a `Transaction` for reuse multiple times, that potentially
-	 * is used to wrap several different methods. Wrappers are extremely simple -
-	 * they only require implementing two methods.
-	 *
-	 * <pre>
-	 *                       wrappers (injected at creation time)
-	 *                                      +        +
-	 *                                      |        |
-	 *                    +-----------------|--------|--------------+
-	 *                    |                 v        |              |
-	 *                    |      +---------------+   |              |
-	 *                    |   +--|    wrapper1   |---|----+         |
-	 *                    |   |  +---------------+   v    |         |
-	 *                    |   |          +-------------+  |         |
-	 *                    |   |     +----|   wrapper2  |--------+   |
-	 *                    |   |     |    +-------------+  |     |   |
-	 *                    |   |     |                     |     |   |
-	 *                    |   v     v                     v     v   | wrapper
-	 *                    | +---+ +---+   +---------+   +---+ +---+ | invariants
-	 * perform(anyMethod) | |   | |   |   |         |   |   | |   | | maintained
-	 * +----------------->|-|---|-|---|-->|anyMethod|---|---|-|---|-|-------->
-	 *                    | |   | |   |   |         |   |   | |   | |
-	 *                    | |   | |   |   |         |   |   | |   | |
-	 *                    | |   | |   |   |         |   |   | |   | |
-	 *                    | +---+ +---+   +---------+   +---+ +---+ |
-	 *                    |  initialize                    close    |
-	 *                    +-----------------------------------------+
-	 * </pre>
-	 *
-	 * Use cases:
-	 * - Preserving the input selection ranges before/after reconciliation.
-	 *   Restoring selection even in the event of an unexpected error.
-	 * - Deactivating events while rearranging the DOM, preventing blurs/focuses,
-	 *   while guaranteeing that afterwards, the event system is reactivated.
-	 * - Flushing a queue of collected DOM mutations to the main UI thread after a
-	 *   reconciliation takes place in a worker thread.
-	 * - Invoking any collected `componentDidUpdate` callbacks after rendering new
-	 *   content.
-	 * - (Future use case): Wrapping particular flushes of the `ReactWorker` queue
-	 *   to preserve the `scrollTop` (an automatic scroll aware DOM).
-	 * - (Future use case): Layout calculations before and after DOM updates.
-	 *
-	 * Transactional plugin API:
-	 * - A module that has an `initialize` method that returns any precomputation.
-	 * - and a `close` method that accepts the precomputation. `close` is invoked
-	 *   when the wrapped process is completed, or has failed.
-	 *
-	 * @param {Array<TransactionalWrapper>} transactionWrapper Wrapper modules
-	 * that implement `initialize` and `close`.
-	 * @return {Transaction} Single transaction for reuse in thread.
-	 *
-	 * @class Transaction
-	 */
-	var Mixin = {
-	  /**
-	   * Sets up this instance so that it is prepared for collecting metrics. Does
-	   * so such that this setup method may be used on an instance that is already
-	   * initialized, in a way that does not consume additional memory upon reuse.
-	   * That can be useful if you decide to make your subclass of this mixin a
-	   * "PooledClass".
-	   */
-	  reinitializeTransaction: function reinitializeTransaction() {
-	    this.transactionWrappers = this.getTransactionWrappers();
-	    if (!this.wrapperInitData) {
-	      this.wrapperInitData = [];
-	    } else {
-	      this.wrapperInitData.length = 0;
-	    }
-	    this._isInTransaction = false;
-	  },
-
-	  _isInTransaction: false,
-
-	  /**
-	   * @abstract
-	   * @return {Array<TransactionWrapper>} Array of transaction wrappers.
-	   */
-	  getTransactionWrappers: null,
-
-	  isInTransaction: function isInTransaction() {
-	    return !!this._isInTransaction;
-	  },
-
-	  /**
-	   * Executes the function within a safety window. Use this for the top level
-	   * methods that result in large amounts of computation/mutations that would
-	   * need to be safety checked.
-	   *
-	   * @param {function} method Member of scope to call.
-	   * @param {Object} scope Scope to invoke from.
-	   * @param {Object?=} args... Arguments to pass to the method (optional).
-	   *                           Helps prevent need to bind in many cases.
-	   * @return Return value from `method`.
-	   */
-	  perform: function perform(method, scope, a, b, c, d, e, f) {
-	    "production" !== process.env.NODE_ENV ? invariant(!this.isInTransaction(), "Transaction.perform(...): Cannot initialize a transaction when there " + "is already an outstanding transaction.") : invariant(!this.isInTransaction());
-	    var errorThrown;
-	    var ret;
-	    try {
-	      this._isInTransaction = true;
-	      // Catching errors makes debugging more difficult, so we start with
-	      // errorThrown set to true before setting it to false after calling
-	      // close -- if it's still set to true in the finally block, it means
-	      // one of these calls threw.
-	      errorThrown = true;
-	      this.initializeAll(0);
-	      ret = method.call(scope, a, b, c, d, e, f);
-	      errorThrown = false;
-	    } finally {
-	      try {
-	        if (errorThrown) {
-	          // If `method` throws, prefer to show that stack trace over any thrown
-	          // by invoking `closeAll`.
-	          try {
-	            this.closeAll(0);
-	          } catch (err) {}
-	        } else {
-	          // Since `method` didn't throw, we don't want to silence the exception
-	          // here.
-	          this.closeAll(0);
-	        }
-	      } finally {
-	        this._isInTransaction = false;
-	      }
-	    }
-	    return ret;
-	  },
-
-	  initializeAll: function initializeAll(startIndex) {
-	    var transactionWrappers = this.transactionWrappers;
-	    for (var i = startIndex; i < transactionWrappers.length; i++) {
-	      var wrapper = transactionWrappers[i];
-	      try {
-	        // Catching errors makes debugging more difficult, so we start with the
-	        // OBSERVED_ERROR state before overwriting it with the real return value
-	        // of initialize -- if it's still set to OBSERVED_ERROR in the finally
-	        // block, it means wrapper.initialize threw.
-	        this.wrapperInitData[i] = Transaction.OBSERVED_ERROR;
-	        this.wrapperInitData[i] = wrapper.initialize ? wrapper.initialize.call(this) : null;
-	      } finally {
-	        if (this.wrapperInitData[i] === Transaction.OBSERVED_ERROR) {
-	          // The initializer for wrapper i threw an error; initialize the
-	          // remaining wrappers but silence any exceptions from them to ensure
-	          // that the first error is the one to bubble up.
-	          try {
-	            this.initializeAll(i + 1);
-	          } catch (err) {}
-	        }
-	      }
-	    }
-	  },
-
-	  /**
-	   * Invokes each of `this.transactionWrappers.close[i]` functions, passing into
-	   * them the respective return values of `this.transactionWrappers.init[i]`
-	   * (`close`rs that correspond to initializers that failed will not be
-	   * invoked).
-	   */
-	  closeAll: function closeAll(startIndex) {
-	    "production" !== process.env.NODE_ENV ? invariant(this.isInTransaction(), "Transaction.closeAll(): Cannot close transaction when none are open.") : invariant(this.isInTransaction());
-	    var transactionWrappers = this.transactionWrappers;
-	    for (var i = startIndex; i < transactionWrappers.length; i++) {
-	      var wrapper = transactionWrappers[i];
-	      var initData = this.wrapperInitData[i];
-	      var errorThrown;
-	      try {
-	        // Catching errors makes debugging more difficult, so we start with
-	        // errorThrown set to true before setting it to false after calling
-	        // close -- if it's still set to true in the finally block, it means
-	        // wrapper.close threw.
-	        errorThrown = true;
-	        if (initData !== Transaction.OBSERVED_ERROR && wrapper.close) {
-	          wrapper.close.call(this, initData);
-	        }
-	        errorThrown = false;
-	      } finally {
-	        if (errorThrown) {
-	          // The closer for wrapper i threw an error; close the remaining
-	          // wrappers but silence any exceptions from them to ensure that the
-	          // first error is the one to bubble up.
-	          try {
-	            this.closeAll(i + 1);
-	          } catch (e) {}
-	        }
-	      }
-	    }
-	    this.wrapperInitData.length = 0;
-	  }
-	};
-
-	var Transaction = {
-
-	  Mixin: Mixin,
-
-	  /**
-	   * Token to look for to determine if an error occured.
-	   */
-	  OBSERVED_ERROR: {}
-
-	};
-
-	module.exports = Transaction;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
 
 /***/ },
 /* 221 */
@@ -28659,7 +28643,7 @@
 	};
 
 	module.exports = CSSPropertyOperations;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 223 */
@@ -29245,7 +29229,7 @@
 
 	"use strict";
 
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 
 	/**
 	 * @interface Event
@@ -29287,7 +29271,7 @@
 
 	"use strict";
 
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 
 	/**
 	 * @interface Event
@@ -29523,7 +29507,7 @@
 	};
 
 	module.exports = LocalEventTrapMixin;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 232 */
@@ -29638,7 +29622,7 @@
 	};
 
 	module.exports = DOMChildrenOperations;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 233 */
@@ -29766,7 +29750,7 @@
 	};
 
 	module.exports = LinkedValueUtils;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 234 */
@@ -29856,7 +29840,7 @@
 	};
 
 	module.exports = EventListener;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 235 */
@@ -29990,7 +29974,7 @@
 	};
 
 	module.exports = ReactComponentEnvironment;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 238 */
@@ -30227,7 +30211,7 @@
 
 	"use strict";
 
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 
 	/**
 	 * @interface Event
@@ -30496,7 +30480,7 @@
 
 	"use strict";
 
-	var SyntheticEvent = __webpack_require__(218);
+	var SyntheticEvent = __webpack_require__(220);
 
 	var getEventTarget = __webpack_require__(235);
 
@@ -30882,7 +30866,7 @@
 	};
 
 	module.exports = EventPluginRegistry;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 250 */
@@ -30901,7 +30885,7 @@
 
 	"use strict";
 
-	var EventPluginHub = __webpack_require__(215);
+	var EventPluginHub = __webpack_require__(217);
 
 	function runEventQueueInBatch(events) {
 	  EventPluginHub.enqueueEvents(events);
@@ -31122,7 +31106,7 @@
 	};
 
 	module.exports = ReactOwner;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 255 */
@@ -31225,7 +31209,7 @@
 	};
 
 	module.exports = CSSCore;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 256 */
@@ -31432,7 +31416,7 @@
 	}
 
 	module.exports = accumulateInto;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 259 */
@@ -32198,7 +32182,7 @@
 	};
 
 	module.exports = Danger;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 271 */
@@ -32681,7 +32665,7 @@
 	}
 
 	module.exports = flattenChildren;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 277 */
@@ -32771,7 +32755,7 @@
 	}
 
 	module.exports = createNodesFromMarkup;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 278 */
@@ -32890,7 +32874,7 @@
 	}
 
 	module.exports = getMarkupWrap;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ },
 /* 279 */
@@ -33120,7 +33104,7 @@
 	module.exports = toArray;
 
 	// IE < 9 does not support Array#slice on collections objects
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(145)))
 
 /***/ }
 /******/ ]);
