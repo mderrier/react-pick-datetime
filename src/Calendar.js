@@ -43,6 +43,7 @@ var Calendar = React.createClass({
 
   render: function() {
     var {
+      buttonComponent,
       className, 
       month, 
       value, 
@@ -56,7 +57,7 @@ var Calendar = React.createClass({
     return (
       <div {...otherProps} className={joinClasses('Calendar', className)}>
         <CalendarHeader
-          {...{month, onMonthChange}}
+          {...{month, onMonthChange, buttonComponent}}
           getHeadingId={this.getHeadingId}
         />
         <CalendarGrid

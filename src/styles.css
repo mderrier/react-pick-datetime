@@ -3,19 +3,7 @@
   position: relative;
 }
 
-.DateInputButton {
-  cursor: default;
-  font-size: 0.75em;
-  opacity: 0.8;
-  position: absolute;
-  right: 0.2em;
-}
-
-.DateInputButton:active {
-  opacity: 1;
-}
-
-.DateInput .InputPopupWrapper-popup {
+.DateInput .InputWithPopup-popup {
   width: auto;
 }
 

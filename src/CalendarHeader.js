@@ -1,4 +1,5 @@
 var React = require('react/addons');
+var ComponentPropType = require('react-pick/lib/helpers/ComponentPropType');
 
 var {PureRenderMixin} = React.addons;
 
@@ -11,7 +12,14 @@ var CalendarHeader = React.createClass({
   propTypes: {
     getHeadingId: React.PropTypes.func.isRequired,
     onMonthChange: React.PropTypes.func.isRequired,
-    month: React.PropTypes.object.isRequired
+    month: React.PropTypes.object.isRequired,
+    buttonComponent: ComponentPropType
+  },
+
+  getDefaultProps: function() {
+    return {
+      buttonComponent: 'button'
+    };
   },
 
   handleNextButtonClick: function() {
@@ -23,23 +31,24 @@ var CalendarHeader = React.createClass({
   },
 
   render: function() {
-    var {getHeadingId, month} = this.props;
+    var ButtonComponent = this.props.buttonComponent;
+    var {getHeadingId, month, ...otherProps} = this.props;
 
     return (
-      <div className="CalendarHeader">
-        <button 
+      <div {...otherProps} className="CalendarHeader">
+        <ButtonComponent 
           className="CalendarHeader-previousButton"
           onClick={this.handlePreviousButtonClick}
           tabIndex="0">
           &#9664;
-        </button>
+        </ButtonComponent>
 
-        <button 
+        <ButtonComponent 
           className="CalendarHeader-nextButton"
           onClick={this.handleNextButtonClick}
           tabIndex="0">
           &#9654;
-        </button>
+        </ButtonComponent>
         
         <div 
           aria-live="assertive"

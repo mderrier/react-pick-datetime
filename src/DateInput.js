@@ -1,6 +1,6 @@
-var DateInput = require('./DateInput');
-var DateInputButton = require('./DateInputButton');
 var Calendar = require('./Calendar');
+var CalendarToggleButton = require('./CalendarToggleButton');
+var DateInput = require('./DateInput');
 var React = require('react/addons');
 var {InputWithPopup} = require('react-pick');
 
@@ -38,12 +38,6 @@ var DateInput = React.createClass({
     inputValueFormat: React.PropTypes.string,
 
     /**
-     * The component to render for the button that lets you toggle the popup.
-     * Default is `DateInputButton`.
-     */
-    buttonComponent: React.PropTypes.func,
-
-    /**
      * The component to render for the calendar in the popup.
      * Default is `Calendar`.
      */
@@ -56,7 +50,6 @@ var DateInput = React.createClass({
       inputValueFormat: 'l',
       onComplete: emptyFunction,
       inputComponent: 'input',
-      buttonComponent: DateInputButton,
       calendarComponent: Calendar
     };
   },
@@ -121,29 +114,30 @@ var DateInput = React.createClass({
   },
 
   render: function() {
-    var ButtonComponent = this.props.buttonComponent;
-    var PopupComponent = this.props.calendarComponent;
+    var CalendarComponent = this.props.calendarComponent;
+    var {buttonComponent, value, ...otherProps} = this.props;
 
     return (
       <div className="DateInput">
         <InputWithPopup
-          {...this.props}
+          {...otherProps}
           isOpen={this.state.isOpen} 
           value={this.state.inputValue}
           onFocus={this.handleInputFocus}
           onBlur={this.handleInputBlur}
           onChange={this.handleInputChange}>
-          <PopupComponent 
-            ref="popup"
+          <CalendarComponent 
+            buttonComponent={buttonComponent}
             month={this.state.popupMonth}
-            value={this.props.value}
-            onMonthChange={this.handlePopupMonthChange}
+            onCancel={this.handlePopupCancel}
             onChange={this.handlePopupChange}
             onComplete={this.handlePopupComplete}
-            onCancel={this.handlePopupCancel}
+            onMonthChange={this.handlePopupMonthChange}
+            ref="popup"
+            value={value}
           />
         </InputWithPopup>
-        <ButtonComponent
+        <CalendarToggleButton
           aria-hidden="true" 
           onClick={this.handleButtonClick}
         />

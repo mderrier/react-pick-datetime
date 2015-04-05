@@ -54,10 +54,11 @@ var CalendarGridBody = React.createClass({
   },
 
   render: function() {
-    var weeks = getWeeks(this.props.month, this.props.value);
+    var {month, value, ...otherProps} = this.props;
+    var weeks = getWeeks(month, value);
 
     return (
-      <tbody>
+      <tbody {...otherProps}>
         {weeks.map((week, idx) => (
           <tr key={idx}>
             {week.map((day, idx) => (

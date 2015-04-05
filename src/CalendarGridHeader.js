@@ -30,10 +30,11 @@ var CalendarGridHeader = React.createClass({
   },
 
   render: function() {
-    var headings = getDayHeadings(this.props.month);
+    var {month, ...otherProps} = this.props;
+    var headings = getDayHeadings(month);
     
     return (
-      <thead>
+      <thead {...otherProps}>
         <tr>
           {headings.map((heading, idx) => (
             <th key={idx}>
