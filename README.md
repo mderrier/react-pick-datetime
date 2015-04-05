@@ -1,5 +1,7 @@
 # react-pick-datetime
 
+[![Build Status](https://travis-ci.org/hellojwilde/react-pick-datetime.svg?branch=master)](https://travis-ci.org/hellojwilde/react-pick-datetime)
+
 Accessible widgets for picking dates and times, implemented in React. 
 
 Built on top of [react-pick](https://github.com/hellojwilde/react-pick) and [moment](http://momentjs.com/).
