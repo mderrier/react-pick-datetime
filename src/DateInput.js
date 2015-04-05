@@ -14,7 +14,7 @@ var DateInput = React.createClass({
   mixins: [PureRenderMixin],
 
   propTypes: {
-    /**
+    /**\
      * Event handler fired when the value of the `<DateInput>` changes.
      * The called function is passed `value`.
      */
