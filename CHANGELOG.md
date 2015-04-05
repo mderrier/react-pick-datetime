@@ -1,4 +1,10 @@
-### v0.5.0 (2014-05-04)
+### v0.5.1 (2014-04-05)
+
+#### BUGFIX
+
+- Ensure that we don't fail with an undefined value on return key on `CalendarGrid`. Add appropriate failing test case, along with others for `CalendarGridKeyBindings`.
+
+### v0.5.0 (2014-04-04)
 
 #### BUGFIX
 
@@ -8,6 +14,7 @@
 
 - Move onto v0.5.0 of `react-pick` and rectify everything to work with its changes. Drop `inputComponent` as an option.
 - Expose `Calendar` as a widget publicly.
+- There is now a `buttonComponent` option for configuring button classes.
 
 ### v0.4.1 (2014-04-04)
 

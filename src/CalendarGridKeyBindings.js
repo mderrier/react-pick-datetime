@@ -39,7 +39,7 @@ const CalendarGridKeyBindings = {
   },
 
   complete: ensureValue(function(props) {
-    props.onComplete(value);
+    props.onComplete(props.value);
   }),
 
   changeToNextDay: ensureValue(function(props) {
