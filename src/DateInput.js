@@ -41,7 +41,14 @@ var DateInput = React.createClass({
      * The component to render for the calendar in the popup.
      * Default is `Calendar`.
      */
-    calendarComponent: React.PropTypes.func
+    calendarComponent: React.PropTypes.func,
+
+    /**
+     * The component to render for the toggle button next to the input box.
+     * Setting this to `null` hides the toggle button entirely.
+     * Default is `CalendarToggleButton`.
+     */
+    calendarToggleButtonComponent: React.PropTypes.func
   },
 
   getDefaultProps: function() {
@@ -50,7 +57,8 @@ var DateInput = React.createClass({
       inputValueFormat: 'l',
       onComplete: emptyFunction,
       inputComponent: 'input',
-      calendarComponent: Calendar
+      calendarComponent: Calendar,
+      calendarToggleButtonComponent: CalendarToggleButton
     };
   },
 
@@ -107,7 +115,7 @@ var DateInput = React.createClass({
     }
   },
 
-  handleButtonClick: function() {
+  handleClick: function() {
     this.setState({isOpen: !this.state.isOpen}, () => {
       this.state.isOpen && this.refs['popup'].focusOnGrid();
     });
@@ -115,6 +123,7 @@ var DateInput = React.createClass({
 
   render: function() {
     var CalendarComponent = this.props.calendarComponent;
+    var CalendarToggleButtonComponent = this.props.calendarToggleButtonComponent;
     var {buttonComponent, value, ...otherProps} = this.props;
 
     return (
@@ -126,7 +135,7 @@ var DateInput = React.createClass({
           onFocus={this.handleInputFocus}
           onBlur={this.handleInputBlur}
           onChange={this.handleInputChange}
-          onClick={this.handleButtonClick}>
+          onClick={this.handleClick}>
           <CalendarComponent 
             buttonComponent={buttonComponent}
             month={this.state.popupMonth}
@@ -138,10 +147,10 @@ var DateInput = React.createClass({
             value={value}
           />
         </InputWithPopup>
-        <CalendarToggleButton
+        {CalendarToggleButtonComponent && <CalendarToggleButtonComponent
           aria-hidden="true" 
-          onClick={this.handleButtonClick}
-        />
+          onClick={this.handleClick}
+        />}
       </div>
     );
   }

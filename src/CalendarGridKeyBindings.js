@@ -7,7 +7,7 @@ const KEY_ARROW_RIGHT = 39;
 const KEY_RETURN = 13;
 const KEY_ESC = 27;
 
-function ensureValue(fun) {
+function onlyCallIfValuePropPassed(fun) {
   return function(props) {
     if (props.value) {
       fun(props);
@@ -38,23 +38,23 @@ const CalendarGridKeyBindings = {
     };
   },
 
-  complete: ensureValue(function(props) {
+  complete: onlyCallIfValuePropPassed(function(props) {
     props.onComplete(props.value);
   }),
 
-  changeToNextDay: ensureValue(function(props) {
+  changeToNextDay: onlyCallIfValuePropPassed(function(props) {
     props.onChange(moment(props.value).add(1, 'd'));
   }),
 
-  changeToPreviousDay: ensureValue(function(props) {
+  changeToPreviousDay: onlyCallIfValuePropPassed(function(props) {
     props.onChange(moment(props.value).subtract(1, 'd'));
   }),
 
-  changeToNextWeek: ensureValue(function(props) {
+  changeToNextWeek: onlyCallIfValuePropPassed(function(props) {
     props.onChange(moment(props.value).add(1, 'w'));
   }),
 
-  changeToPreviousWeek: ensureValue(function(props) {
+  changeToPreviousWeek: onlyCallIfValuePropPassed(function(props) {
     props.onChange(moment(props.value).subtract(1, 'w'));
   }),
 
