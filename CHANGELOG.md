@@ -1,5 +1,12 @@
 ### v0.5.2 (2014-04-28)
 
+#### THANKS
+
+Two awesome contributors who submitted pull requests for this release:
+
+- https://github.com/alexandre-garrec
+- https://github.com/tom-s
+
 #### BUGFIX
 
 - For locales that have a week start day different from the USA, the date numbers in the calendar grid will now appropriately align with the headers.
