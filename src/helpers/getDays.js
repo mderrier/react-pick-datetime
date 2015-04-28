@@ -8,7 +8,7 @@ function getDays(month, value) {
   var weeks = [];
 
   while (!currentDay.isAfter(endDay)) {
-    if (currentDay.day() === 0) {
+    if (moment(currentDay).startOf('week').day() === currentDay.day()) {
       currentWeek = [];
       weeks.push(currentWeek);
     }
