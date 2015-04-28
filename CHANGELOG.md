@@ -1,3 +1,15 @@
+### v0.5.2 (2014-04-28)
+
+#### BUGFIX
+
+- For locales that have a week start day different from the USA, the date numbers in the calendar grid will now appropriately align with the headers.
+
+#### CHANGES
+
+- It's now possible to change and/or hide the calendar toggle button on `DateInput` with the `calendarToggleButtonComponent` property.
+- Clicking the `DateInput` field now displays the calendar.
+- There's now a `locale` property on both `DateInput` and `TimeInput` that you can use to override the rendered locale with. This property defaults to the browser's normal locale.
+
 ### v0.5.1 (2014-04-05)
 
 #### BUGFIX
