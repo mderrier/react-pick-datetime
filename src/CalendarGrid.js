@@ -5,6 +5,8 @@ var React = require('react/addons');
 
 var {PureRenderMixin} = React.addons;
 
+var getDayHeadings = require('./helpers/getDayHeadings');
+var getDays = require('./helpers/getDays');
 var getUniqueId = require('react-pick/lib/helpers/getUniqueId');
 
 var CalendarGrid = React.createClass({
@@ -54,9 +56,10 @@ var CalendarGrid = React.createClass({
         className="CalendarGrid"
         role="grid"
         onKeyDown={this.handleKeyDown}>
-        <CalendarGridHeader month={month} />
+        <CalendarGridHeader headings={getDayHeadings(month)} />
         <CalendarGridBody 
-          {...{month, value, onComplete}}
+          {...{value, onComplete}}
+          days={getDays(month)}
           getDescendantIdForDay={this.getDescendantIdForDay}
         />
       </table>

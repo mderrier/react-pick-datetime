@@ -5,40 +5,13 @@ var {PureRenderMixin} = React.addons;
 var moment = require('moment');
 var joinClasses = require('react/lib/joinClasses');
 
-function getWeeks(month, value) {
-  var today = moment();
-  var endDay = moment(month).endOf('month').endOf('week');
-  var currentDay = moment(month).startOf('month').startOf('week');
-  var currentWeek;
-  var weeks = [];
-
-  while (!currentDay.isAfter(endDay)) {
-    if (currentDay.day() === 0) {
-      currentWeek = [];
-      weeks.push(currentWeek);
-    }
-
-    currentWeek.push({
-      isOtherMonth: currentDay.month() !== month.month(),
-      isValue: value && currentDay.isSame(value, 'day'),
-      isToday: currentDay.isSame(today, 'day'),
-      value: moment(currentDay),
-      formatted: currentDay.format('D')
-    });
-
-    currentDay.add(1, 'days');
-  }
-
-  return weeks;
-}
-
 var CalendarGridBody = React.createClass({
 
   mixins: [PureRenderMixin],
 
   propTypes: {
     getDescendantIdForDay: React.PropTypes.func.isRequired,
-    month: React.PropTypes.object.isRequired,
+    days: React.PropTypes.array.isRequired,
     onComplete: React.PropTypes.func.isRequired,
     value: React.PropTypes.object
   },
@@ -54,12 +27,11 @@ var CalendarGridBody = React.createClass({
   },
 
   render: function() {
-    var {month, value, ...otherProps} = this.props;
-    var weeks = getWeeks(month, value);
+    var {days, value, ...otherProps} = this.props;
 
     return (
       <tbody {...otherProps}>
-        {weeks.map((week, idx) => (
+        {days.map((week, idx) => (
           <tr key={idx}>
             {week.map((day, idx) => (
               <td 
