@@ -42,12 +42,7 @@ var CalendarGrid = React.createClass({
   },
 
   render: function() {
-    var {
-      month, 
-      value, 
-      onComplete,
-      ...otherProps
-    } = this.props;
+    var {month, value, onComplete, ...otherProps} = this.props;
 
     return (
       <table
@@ -58,8 +53,8 @@ var CalendarGrid = React.createClass({
         onKeyDown={this.handleKeyDown}>
         <CalendarGridHeader headings={getDayHeadings(month)} />
         <CalendarGridBody 
-          {...{value, onComplete}}
-          days={getDays(month)}
+          onComplete={onComplete}
+          days={getDays(month, value)}
           getDescendantIdForDay={this.getDescendantIdForDay}
         />
       </table>

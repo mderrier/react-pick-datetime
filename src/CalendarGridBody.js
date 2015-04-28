@@ -12,14 +12,7 @@ var CalendarGridBody = React.createClass({
   propTypes: {
     getDescendantIdForDay: React.PropTypes.func.isRequired,
     days: React.PropTypes.array.isRequired,
-    onComplete: React.PropTypes.func.isRequired,
-    value: React.PropTypes.object
-  },
-
-  getDefaultProps: function() {
-    return {
-      value: null
-    };
+    onComplete: React.PropTypes.func.isRequired
   },
 
   handleDayClick: function(day) {
@@ -27,7 +20,7 @@ var CalendarGridBody = React.createClass({
   },
 
   render: function() {
-    var {days, value, ...otherProps} = this.props;
+    var {days, ...otherProps} = this.props;
 
     return (
       <tbody {...otherProps}>
@@ -35,7 +28,7 @@ var CalendarGridBody = React.createClass({
           <tr key={idx}>
             {week.map((day, idx) => (
               <td 
-                aria-selected={day.isSelected+''}
+                aria-selected={day.isValue+''}
                 className={joinClasses(
                   'CalendarGridBody-day',
                   day.isToday && 'CalendarGridBody-day--isToday',

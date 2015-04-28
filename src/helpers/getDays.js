@@ -15,7 +15,7 @@ function getDays(month, value) {
 
     currentWeek.push({
       isOtherMonth: currentDay.month() !== month.month(),
-      isValue: value && currentDay.isSame(value, 'day'),
+      isValue: value ? currentDay.isSame(value, 'day') : false,
       isToday: currentDay.isSame(today, 'day'),
       value: moment(currentDay),
       formatted: currentDay.format('D')
