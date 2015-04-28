@@ -36,7 +36,14 @@ var TimeInput = React.createClass({
      * The format of the time shown and parsed in the `<input> box.
      * Default is `'LT'`.
      */
-    inputValueFormat: React.PropTypes.string
+    inputValueFormat: React.PropTypes.string,
+
+    /**
+     * The locale to be used for the format of the date. If you absolutely need 
+     * to override the locale for some reason, use this.
+     * Default is the browser's `window.navigator.language` value.
+     */
+    locale: React.PropTypes.string
   },
 
   getDefaultProps: function() {

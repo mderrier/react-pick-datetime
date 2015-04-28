@@ -14,7 +14,7 @@ var DateInput = React.createClass({
   mixins: [PureRenderMixin],
 
   propTypes: {
-    /**\
+    /**
      * Event handler fired when the value of the `<DateInput>` changes.
      * The called function is passed `value`.
      */
@@ -48,7 +48,14 @@ var DateInput = React.createClass({
      * Setting this to `null` hides the toggle button entirely.
      * Default is `CalendarToggleButton`.
      */
-    calendarToggleButtonComponent: React.PropTypes.func
+    calendarToggleButtonComponent: React.PropTypes.func,
+
+    /**
+     * The locale to be used for the format of the date. If you absolutely need 
+     * to override the locale for some reason, use this.
+     * Default is the browser's `window.navigator.language` value.
+     */
+    locale: React.PropTypes.string
   },
 
   getDefaultProps: function() {
@@ -58,7 +65,8 @@ var DateInput = React.createClass({
       onComplete: emptyFunction,
       inputComponent: 'input',
       calendarComponent: Calendar,
-      calendarToggleButtonComponent: CalendarToggleButton
+      calendarToggleButtonComponent: CalendarToggleButton,
+      locale: window.navigator.userLanguage || window.navigator.language
     };
   },
 
