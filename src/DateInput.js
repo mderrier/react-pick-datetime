@@ -71,11 +71,11 @@ var DateInput = React.createClass({
   },
 
   getInitialState: function() {
-    var {value, inputValueFormat} = this.props;
+    var {value, locale, inputValueFormat} = this.props;
 
     return {
       isOpen: false,
-      popupMonth: value || moment(),
+      popupMonth: value || moment().locale(locale),
       inputValue: (value !== null) ? value.format(inputValueFormat) : null
     };
   },
@@ -110,11 +110,11 @@ var DateInput = React.createClass({
 
   handleInputChange: function(event) {
     var inputValue = event.target.value;
-    var inputValueFormat = this.props.inputValueFormat;
+    var {locale, inputValueFormat} = this.props;
 
     this.setState({inputValue});
 
-    var parsedInputValue = moment(inputValue, inputValueFormat, true);
+    var parsedInputValue = moment(inputValue, inputValueFormat, locale, true);
     if (parsedInputValue.isValid()) {
       this.setState({popupMonth: parsedInputValue});
       this.props.onChange(parsedInputValue);
