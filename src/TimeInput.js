@@ -44,13 +44,14 @@ var TimeInput = React.createClass({
       start: moment().startOf('day'),
       end: moment().endOf('day'),
       increment: {amount: 5, unit: 'minutes'},
-      inputValueFormat: 'LT'
+      inputValueFormat: 'LT',
+      locale: window.navigator.userLanguage || window.navigator.language
     };
   },
 
   getOptions: function() {
     var {amount, unit} = this.props.increment;
-    var time = moment(this.props.start);
+    var time = moment(this.props.start).locale(this.props.locale);
     var options = [];
 
     while (time.isBefore(this.props.end)) {
