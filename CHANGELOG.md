@@ -1,4 +1,16 @@
-### v0.5.2 (2014-04-28)
+### v0.5.3 (2015-08-06)
+
+#### THANKS
+
+The awesome contributor who submitted the pull request for this release:
+
+- https://github.com/AlanFoster
+
+#### BUGFIX
+
+- There's now a copy of [a Promise polyfill](https://www.npmjs.com/package/promise) included by default so that it works on older browsers.
+
+### v0.5.2 (2015-04-28)
 
 #### THANKS
 
@@ -23,7 +35,7 @@ Two awesome contributors who submitted pull requests for this release:
 
 - Ensure that we don't fail with an undefined value on return key on `CalendarGrid`. Add appropriate failing test case, along with others for `CalendarGridKeyBindings`.
 
-### v0.5.0 (2014-04-04)
+### v0.5.0 (2015-04-04)
 
 #### BUGFIX
 
