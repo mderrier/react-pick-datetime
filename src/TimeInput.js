@@ -1,4 +1,5 @@
 var React = require('react/addons');
+var Promise = require('promise');
 var {Combobox} = require('react-pick');
 
 var {PureRenderMixin} = React.addons;
@@ -39,7 +40,7 @@ var TimeInput = React.createClass({
     inputValueFormat: React.PropTypes.string,
 
     /**
-     * The locale to be used for the format of the date. If you absolutely need 
+     * The locale to be used for the format of the date. If you absolutely need
      * to override the locale for some reason, use this.
      * Default is the browser's `window.navigator.language` value.
      */
