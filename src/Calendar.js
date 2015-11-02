@@ -5,7 +5,7 @@ var React = require('react/addons');
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
-var joinClasses = require('react/lib/joinClasses');
+var joinClasses = require('fbjs/lib/joinClasses');
 var getUniqueId = require('react-pick/lib/helpers/getUniqueId');
 
 var Calendar = React.createClass({
@@ -29,7 +29,7 @@ var Calendar = React.createClass({
 
   getInitialState: function() {
     return {
-      id: getUniqueId('Calendar') 
+      id: getUniqueId('Calendar')
     };
   },
 
@@ -44,13 +44,13 @@ var Calendar = React.createClass({
   render: function() {
     var {
       buttonComponent,
-      className, 
-      month, 
-      value, 
-      onMonthChange, 
-      onChange, 
-      onComplete, 
-      onCancel, 
+      className,
+      month,
+      value,
+      onMonthChange,
+      onChange,
+      onComplete,
+      onCancel,
       ...otherProps
     } = this.props;
 

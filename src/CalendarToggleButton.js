@@ -1,7 +1,7 @@
 var React = require('react');
 var ComponentPropType = require('react-pick/lib/helpers/ComponentPropType');
 
-var joinClasses = require('react/lib/joinClasses');
+var joinClasses = require('fbjs/lib/joinClasses');
 
 var CalendarToggleButton = React.createClass({
 

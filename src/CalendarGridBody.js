@@ -3,7 +3,7 @@ var React = require('react/addons');
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
-var joinClasses = require('react/lib/joinClasses');
+var joinClasses = require('fbjs/lib/joinClasses');
 
 var CalendarGridBody = React.createClass({
 
@@ -27,7 +27,7 @@ var CalendarGridBody = React.createClass({
         {days.map((week, idx) => (
           <tr key={idx}>
             {week.map((day, idx) => (
-              <td 
+              <td
                 aria-selected={day.isValue+''}
                 className={joinClasses(
                   'CalendarGridBody-day',
