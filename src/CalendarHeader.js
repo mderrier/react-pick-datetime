@@ -1,7 +1,7 @@
-var React = require('react/addons');
-var ComponentPropType = require('react-pick/lib/helpers/ComponentPropType');
+var React = require('react');
+var ComponentPropType = require('react-pick-2/lib/helpers/ComponentPropType');
 
-var {PureRenderMixin} = React.addons;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var moment = require('moment');
 

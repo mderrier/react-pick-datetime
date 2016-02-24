@@ -1,13 +1,12 @@
-var React = require('react/addons');
-var Promise = require('promise');
-var {Combobox} = require('react-pick');
+var React = require('react')
+var Promise = require('promise')
+var {Combobox} = require('react-pick-2')
 
-var {PureRenderMixin} = React.addons;
+var PureRenderMixin = require('react-addons-pure-render-mixin')
 
-var moment = require('moment');
+var moment = require('moment')
 
 var TimeInput = React.createClass({
-
   propTypes: {
     /**
      * A `moment` object for the start of the time range to do completions for.
@@ -47,56 +46,52 @@ var TimeInput = React.createClass({
     locale: React.PropTypes.string
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function () {
     return {
       start: moment().startOf('day'),
       end: moment().endOf('day'),
       increment: {amount: 5, unit: 'minutes'},
       inputValueFormat: 'LT',
       locale: window.navigator.userLanguage || window.navigator.language
-    };
+    }
   },
 
-  getOptions: function() {
-    var {amount, unit} = this.props.increment;
-    var time = moment(this.props.start).locale(this.props.locale);
-    var options = [];
+  getOptions: function () {
+    var {amount, unit} = this.props.increment
+    var time = moment(this.props.start).locale(this.props.locale)
+    var options = []
 
     while (time.isBefore(this.props.end)) {
-      options.push(moment(time));
-      time.add(amount, unit);
+      options.push(moment(time))
+      time.add(amount, unit)
     }
 
-    return options;
+    return options
   },
 
-  getOptionsForInputValue: function(inputValue) {
+  getOptionsForInputValue: function (inputValue) {
     return new Promise((resolve, reject) => {
       if (inputValue === '') {
-        resolve([]);
-        return;
+        resolve([])
+        return
       }
 
       resolve(this.getOptions().filter((option) => {
-        return this.getLabelForOption(option).indexOf(inputValue) === 0;
-      }));
-    });
+        return this.getLabelForOption(option).indexOf(inputValue) === 0
+      }))
+    })
   },
 
-  getLabelForOption: function(option) {
-    return option.format(this.props.inputValueFormat);
+  getLabelForOption: function (option) {
+    return option.format(this.props.inputValueFormat)
   },
 
-  render: function() {
+  render: function () {
     return (
-      <Combobox
-        {...this.props}
-        getLabelForOption={this.getLabelForOption}
-        getOptionsForInputValue={this.getOptionsForInputValue}
-      />
-    );
+    <Combobox {...this.props} getLabelForOption={this.getLabelForOption} getOptionsForInputValue={this.getOptionsForInputValue} />
+    )
   }
 
-});
+})
 
-module.exports = TimeInput;
+module.exports = TimeInput

@@ -1,6 +1,6 @@
-var React = require('react/addons');
+var React = require('react');
 
-var {PureRenderMixin} = React.addons;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var CalendarGridHeader = React.createClass({
 

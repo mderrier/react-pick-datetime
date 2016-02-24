@@ -1,6 +1,6 @@
 var CalendarGrid = require('./CalendarGrid');
 var CalendarHeader = require('./CalendarHeader');
-var React = require('react/addons');
+var React = require('react');
 
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 

@@ -1,13 +1,13 @@
 var Calendar = require('./Calendar');
 var CalendarToggleButton = require('./CalendarToggleButton');
 var DateInput = require('./DateInput');
-var React = require('react/addons');
-var {InputWithPopup} = require('react-pick');
+var React = require('react');
+var {InputWithPopup} = require('react-pick-2');
 
 var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
-var emptyFunction = require('react-pick/lib/helpers/emptyFunction');
+var emptyFunction = require('react-pick-2/lib/helpers/emptyFunction');
 
 var DateInput = React.createClass({
 

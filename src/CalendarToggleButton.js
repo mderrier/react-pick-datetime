@@ -1,5 +1,5 @@
 var React = require('react');
-var ComponentPropType = require('react-pick/lib/helpers/ComponentPropType');
+var ComponentPropType = require('react-pick-2/lib/helpers/ComponentPropType');
 
 var joinClasses = require('react/lib/joinClasses');
 

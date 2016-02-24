@@ -1,13 +1,13 @@
 var CalendarGridBody = require('./CalendarGridBody');
 var CalendarGridHeader = require('./CalendarGridHeader')
 var CalendarGridKeyBindings = require('./CalendarGridKeyBindings');;
-var React = require('react/addons');
+var React = require('react');
 
-var {PureRenderMixin} = React.addons;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var getDayHeadings = require('./helpers/getDayHeadings');
 var getDays = require('./helpers/getDays');
-var getUniqueId = require('react-pick/lib/helpers/getUniqueId');
+var getUniqueId = require('react-pick-2/lib/helpers/getUniqueId');
 
 var CalendarGrid = React.createClass({
 

@@ -1,9 +1,9 @@
-var React = require('react/addons');
+var React = require('react');
 
-var {PureRenderMixin} = React.addons;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var moment = require('moment');
-var joinClasses = require('react/lib/joinClasses');
+var joinClasses = require('fbjs/lib/joinClasses');
 
 var CalendarGridBody = React.createClass({
 
