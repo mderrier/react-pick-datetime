@@ -4,7 +4,8 @@ var DateInput = require('./DateInput');
 var React = require('react');
 var {InputWithPopup} = require('react-pick-2');
 
-var {PureRenderMixin} = React.addons;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
+//var {PureRenderMixin} = React.addons;
 
 var moment = require('moment');
 var emptyFunction = require('react-pick-2/lib/helpers/emptyFunction');
