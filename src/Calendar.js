@@ -2,11 +2,11 @@ var CalendarGrid = require('./CalendarGrid');
 var CalendarHeader = require('./CalendarHeader');
 var React = require('react/addons');
 
-var {PureRenderMixin} = React.addons;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var moment = require('moment');
-var joinClasses = require('react/lib/joinClasses');
-var getUniqueId = require('react-pick/lib/helpers/getUniqueId');
+var joinClasses = require('fbjs/lib/joinClasses');
+var getUniqueId = require('react-pick-2/lib/helpers/getUniqueId');
 
 var Calendar = React.createClass({
 
